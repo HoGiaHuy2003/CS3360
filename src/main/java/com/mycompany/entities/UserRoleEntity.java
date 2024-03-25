@@ -8,6 +8,6 @@ package com.mycompany.entities;
  *
  * @author Admin
  */
-public class Order {
+public class UserRoleEntity {
     
 }
