@@ -101,4 +101,29 @@ public class RolesEntity extends BaseEntity {
 
         return dataList;
     }
+    
+    public static Users findRoleByName(String RoleName) {
+        Users role = null;
+
+        open();
+
+        try {
+            String sql = "SELECT * FROM Roles WHERE RoleName = ?";
+            statement = conn.prepareStatement(sql);
+            
+            statement.setString(1, RoleName);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                role = new Users(resultSet.getInt("RoleId"), resultSet.getString("RoleName"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RolesEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+
+        return role;
+    }
 }

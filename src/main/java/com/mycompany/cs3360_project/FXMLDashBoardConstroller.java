@@ -335,6 +335,8 @@ public class FXMLDashBoardConstroller implements Initializable {
  
         Integer sizeOfRoleList = roleList.size();
         
+        role_list.getItems().clear();
+        
         for (int i = 0; i < sizeOfRoleList; i++) {
             role_list.getItems().add(roleList.get(i).getRoleName());
         }
@@ -378,7 +380,6 @@ public class FXMLDashBoardConstroller implements Initializable {
                         UserRolesEntity.insert(roleList.get(i));
                     }    
                 }
-
             }
         }
         
@@ -419,6 +420,9 @@ public class FXMLDashBoardConstroller implements Initializable {
             System.out.println(role_list.getSelectionModel().getSelectedItems().get(0));
             Integer roleSelectedSize = role_list.getSelectionModel().getSelectedItems().size();
             Integer sizeOfRoleList = roleList.size();
+            
+            role_list.getSelectionModel().getSelectedItems();
+            
             for (int i = 0; i < sizeOfRoleList; i++) {
                 for (int j = 0; j < roleSelectedSize; j++) {
                     if (role_list.getSelectionModel().getSelectedItems().get(j).equalsIgnoreCase(roleList.get(i).getRoleName())) {
@@ -432,28 +436,68 @@ public class FXMLDashBoardConstroller implements Initializable {
                         alert.setHeaderText("Deleted role successfully!!!");
                         alert.setContentText("Role are deleted: " + roleList.get(i).getRoleName());
                         alert.showAndWait();
-                        role_list.getItems().remove(roleList.get(i).getRoleName());
+//                        role_list.getItems().remove(roleList.get(i).getRoleName());
                     }
                 }
             }
-            if (Users.getSelectedUserId() == Users.getLoginUserId()) {
-                getUserNameAndRole();
-            }
+            
+            getUserNameAndRole();
+            
+            setValueForRolesListView();
+            
+
+            
+//            Integer sizeOfRoleList = roleList.size();
+//
+//            for (int i = 0; i < sizeOfRoleList; i++) {
+//                if (RolesEntity.findRoleByName(roleList.get(i)).getRoleName() != null) {
+//                    Users deletedRole = RolesEntity.findRoleByName(roleList.get(i));
+//                    Integer deletedRoleId = deletedRole.getRoleId();
+//                    if (UserRolesEntity.findByRoleId(deletedRoleId) != null) {
+//                        UserRolesEntity.deleteByRoleId(deletedRoleId); 
+//                    }
+//                    RolesEntity.delete(deletedRoleId);
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setTitle("Success!!!");
+//                    alert.setHeaderText("Deleted role successfully!!!");
+//                    alert.setContentText("Role are deleted: " + deletedRole.getRoleName());
+//                    alert.showAndWait();
+//                    role_list.getItems().remove(roleList.get(i));
+//                }
+//            }
+//            if (Users.getSelectedUserId() == Users.getLoginUserId()) {
+//                getUserNameAndRole();
+//            }
+//            if (role_list.getSelectionModel().getSelectedItems() != null) {
+//                ObservableList<Users> roleList = RolesEntity.index();
+//                Integer sizeOfRoleList = roleList.size();
+//                Integer roleSelectedSize = role_list.getSelectionModel().getSelectedItems().size();
+//                for (int i = 0; i < sizeOfRoleList; i++) {
+//                    for (int j = 0; j < roleSelectedSize; j++) {
+//                        if (role_list.getSelectionModel().getSelectedItems().get(j).equalsIgnoreCase(roleList.get(i).getRoleName())) {
+//                            roleList.get(i).setUserId(Users.getSelectedUserId());
+//                            UserRolesEntity.insert(roleList.get(i));
+//                        }    
+//                    }
+//                }
+//            }
         }
     }
     
     private void getUserNameAndRole() {
         Integer loginId = Users.getLoginUserId();
         
-        System.out.println(loginId);
+//        System.out.println(loginId);
         
-        List<Users> userRoleList = UserRolesEntity.findRoleByUserId(Users.getLoginUserId());
+        Users users = UsersEntity.details(loginId);
+        
+        login_username.setText(users.getUsername());
+        
+        List<Users> userRoleList = UserRolesEntity.findRoleByUserId(loginId);
         
         if (userRoleList.size() == 0) {
             return;
         }
-        
-        login_username.setText(userRoleList.get(0).getUsername());
         
         String roleList = userRoleList.get(0).getRoleName();
         
