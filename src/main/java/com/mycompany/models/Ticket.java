@@ -4,6 +4,8 @@
  */
 package com.mycompany.models;
 
+import java.util.Date;
+
 /**
  *
  * @author Admin
@@ -11,19 +13,25 @@ package com.mycompany.models;
 public class Ticket {
     private Integer ticketId;
     
-    private String title;
+    private String ticketName;
     
     private Float price;
     
-    private String startingPoint;
+    private String startingPlace;
     
-    private String endingPoint;
+    private String endingPlace;
     
     private Integer distance;
     
-    private String categoryId;
+    private String departmentTime;
+    
+    private Integer categoryId;
     
     private String categoryName;
+    
+    private Date createdAt;
+    
+    private Date updatedAt;
 
     public Ticket() {
     }
@@ -36,12 +44,12 @@ public class Ticket {
         this.ticketId = ticketId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTicketName() {
+        return ticketName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTicketName(String ticketName) {
+        this.ticketName = ticketName;
     }
 
     public Float getPrice() {
@@ -52,20 +60,20 @@ public class Ticket {
         this.price = price;
     }
 
-    public String getStartingPoint() {
-        return startingPoint;
+    public String getStartingPlace() {
+        return startingPlace;
     }
 
-    public void setStartingPoint(String startingPoint) {
-        this.startingPoint = startingPoint;
+    public void setStartingPlace(String startingPlace) {
+        this.startingPlace = startingPlace;
     }
 
-    public String getEndingPoint() {
-        return endingPoint;
+    public String getEndingPlace() {
+        return endingPlace;
     }
 
-    public void setEndingPoint(String endingPoint) {
-        this.endingPoint = endingPoint;
+    public void setEndingPlace(String endingPlace) {
+        this.endingPlace = endingPlace;
     }
 
     public Integer getDistance() {
@@ -76,11 +84,19 @@ public class Ticket {
         this.distance = distance;
     }
 
-    public String getCategoryId() {
+    public String getDepartmentTime() {
+        return departmentTime;
+    }
+
+    public void setDepartmentTime(String departmentTime) {
+        this.departmentTime = departmentTime;
+    }
+
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -90,6 +106,22 @@ public class Ticket {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
     
     
