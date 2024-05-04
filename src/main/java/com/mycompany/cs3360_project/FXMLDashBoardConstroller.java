@@ -48,59 +48,71 @@ public class FXMLDashBoardConstroller implements Initializable {
     /**
      * Initializes the controller class.
      */
-     @FXML
-    private Button availableAirplane_Btn;
+      @FXML
+    private Button selectTicket_Btn;
 
     @FXML
-    private DatePicker availableAirplane_Date;
+    private DatePicker selectTicket_Date;
 
     @FXML
-    private Button availableAirplane_addBtn;
+    private Button selectTicket_addBtn;
 
     @FXML
-    private TextField availableAirplane_airplaneID;
+    private Button selectTicket_addToCartBtn;
 
     @FXML
-    private TreeTableColumn<?, ?> availableAirplane_airplaneIDTable;
+    private TextField selectTicket_airplaneName;
 
     @FXML
-    private TreeTableColumn<?, ?> availableAirplane_dateTable;
+    private TreeTableColumn<?, ?> selectTicket_airplaneNameTable;
 
     @FXML
-    private Button availableAirplane_deleteBtn;
+    private ComboBox<?> selectTicket_category;
 
     @FXML
-    private AnchorPane availableAirplane_form;
+    private TreeTableColumn<?, ?> selectTicket_categoryTable;
 
     @FXML
-    private TextField availableAirplane_location;
+    private Button selectTicket_deleteBtn;
 
     @FXML
-    private TreeTableColumn<?, ?> availableAirplane_locationTable;
+    private TreeTableColumn<?, ?> selectTicket_departmentTimeTable;
 
     @FXML
-    private TextField availableAirplane_price;
+    private TextField selectTicket_endingPlace;
 
     @FXML
-    private TreeTableColumn<?, ?> availableAirplane_priceTable;
+    private TreeTableColumn<?, ?> selectTicket_endingPlaceBtn;
 
     @FXML
-    private Button availableAirplane_resetBtn;
+    private AnchorPane selectTicket_form;
 
     @FXML
-    private TextField availableAirplane_search;
+    private TextField selectTicket_price;
 
     @FXML
-    private ComboBox<?> availableAirplane_status;
+    private TreeTableColumn<?, ?> selectTicket_priceTable;
 
     @FXML
-    private TreeTableView<?> availableAirplane_tableView;
+    private Button selectTicket_resetBtn;
 
     @FXML
-    private TreeTableColumn<?, ?> availableAirplane_typeTable;
+    private ComboBox<?> selectTicket_searchCategory;
 
     @FXML
-    private Button availableAirplane_updateBtn;
+    private Button selectTicket_selectTicketBtn;
+
+    @FXML
+    private TextField selectTicket_startingPlace;
+
+    @FXML
+    private TreeTableColumn<?, ?> selectTicket_startingPlaceTable;
+
+    @FXML
+    private TreeTableView<?> selectTicket_tableView;
+
+    @FXML
+    private Button selectTicket_updateBtn;
 
     @FXML
     private Button bookingTicket_Btn;
@@ -295,22 +307,22 @@ public class FXMLDashBoardConstroller implements Initializable {
     private void switchForm(ActionEvent event) {
         if(event.getSource() == dashBoard_Btn){
             dashBoard_form.setVisible(true);
-            availableAirplane_form.setVisible(false);
+            selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(false);
-        } else if(event.getSource() == availableAirplane_Btn) {
+        } else if(event.getSource() == selectTicket_Btn) {
             dashBoard_form.setVisible(false);
-            availableAirplane_form.setVisible(true);
+            selectTicket_form.setVisible(true);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(false);
         } else if(event.getSource() == bookingTicket_Btn) {
             dashBoard_form.setVisible(false);
-            availableAirplane_form.setVisible(false);
+            selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(true);
             users_form.setVisible(false);
         } else if(event.getSource() == users_Btn) {
             dashBoard_form.setVisible(false);
-            availableAirplane_form.setVisible(false);
+            selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(true);
         }
