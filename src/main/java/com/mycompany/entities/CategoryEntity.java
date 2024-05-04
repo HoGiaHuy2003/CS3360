@@ -4,10 +4,48 @@
  */
 package com.mycompany.entities;
 
+import static com.mycompany.entities.BaseEntity.close;
+import static com.mycompany.entities.BaseEntity.conn;
+import static com.mycompany.entities.BaseEntity.open;
+import static com.mycompany.entities.BaseEntity.statement;
+import com.mycompany.models.Category;
+import com.mycompany.models.Ticket;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 /**
  *
  * @author Admin
  */
 public class CategoryEntity {
-    
+    public static List<Ticket> getCategoryList() {
+        List<Ticket> categoryList = new Vector<>();
+
+        open();
+
+        try {
+            String sql = "SELECT * FROM category";
+            statement = conn.prepareStatement(sql);
+            
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                Ticket category = new Ticket(resultSet.getInt("CategoryId"), resultSet.getString("CategoryName"));
+                categoryList.add(category);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+        
+        ObservableList<Ticket> dataList = FXCollections.observableList(categoryList);
+        
+        return dataList;
+    }
 }

@@ -23,7 +23,7 @@ public class Ticket {
     
     private Integer distance;
     
-    private String departmentTime;
+    private Date departmentTime;
     
     private Integer categoryId;
     
@@ -34,6 +34,11 @@ public class Ticket {
     private Date updatedAt;
 
     public Ticket() {
+    }
+
+    public Ticket(Integer categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
     public Integer getTicketId() {
@@ -84,11 +89,11 @@ public class Ticket {
         this.distance = distance;
     }
 
-    public String getDepartmentTime() {
+    public Date getDepartmentTime() {
         return departmentTime;
     }
 
-    public void setDepartmentTime(String departmentTime) {
+    public void setDepartmentTime(Date departmentTime) {
         this.departmentTime = departmentTime;
     }
 
