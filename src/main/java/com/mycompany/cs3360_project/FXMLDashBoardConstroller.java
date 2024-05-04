@@ -426,6 +426,16 @@ public class FXMLDashBoardConstroller implements Initializable {
             for (int i = 0; i < sizeOfRoleList; i++) {
                 for (int j = 0; j < roleSelectedSize; j++) {
                     if (role_list.getSelectionModel().getSelectedItems().get(j).equalsIgnoreCase(roleList.get(i).getRoleName())) {
+                        
+                        if (RolesEntity.findRoleByName("Admin").getRoleName().equalsIgnoreCase(role_list.getSelectionModel().getSelectedItems().get(j))) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error!!!");
+                            alert.setHeaderText("Cannot delete role admin!!!");
+                            alert.setContentText("Role admin cannot be deleted!!!");
+                            alert.showAndWait();
+                            continue;
+                        }
+                        
                         Integer deletedRoleId = roleList.get(i).getRoleId();
                         if (UserRolesEntity.findByRoleId(deletedRoleId) != null) {
                             UserRolesEntity.deleteByRoleId(deletedRoleId); 
@@ -542,6 +552,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         } else if (option.get() == ButtonType.OK) {
             UserRolesEntity.deleteByUserId(Users.getLoginUserId());
             UsersEntity.delete(Users.getLoginUserId());
+            Users.setLoginUserId(null);
             signOut();
         }
     } 

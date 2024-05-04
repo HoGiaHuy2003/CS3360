@@ -108,10 +108,10 @@ public class RolesEntity extends BaseEntity {
         open();
 
         try {
-            String sql = "SELECT * FROM Roles WHERE RoleName = ?";
+            String sql = "SELECT * FROM Roles WHERE NormalizedRoleName = ?";
             statement = conn.prepareStatement(sql);
             
-            statement.setString(1, RoleName);
+            statement.setString(1, RoleName.toUpperCase());
 
             ResultSet resultSet = statement.executeQuery();
 

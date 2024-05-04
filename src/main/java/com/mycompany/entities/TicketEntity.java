@@ -4,10 +4,16 @@
  */
 package com.mycompany.entities;
 
+import com.mycompany.models.Ticket;
+
 /**
  *
  * @author Admin
  */
-public class TicketEntity {
-    
+public class TicketEntity extends BaseEntity {
+    public static void insert (Ticket newTicket) {
+        open();
+        
+        String sql = "INSERT INTO Ticket (TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    }
 }

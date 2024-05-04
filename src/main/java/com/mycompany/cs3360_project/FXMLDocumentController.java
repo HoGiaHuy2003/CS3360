@@ -208,7 +208,7 @@ public class FXMLDocumentController implements Initializable {
                     alert.setHeaderText("Cannot register!!!");
                     alert.setContentText("Invalid email, please try again!!!");
                     alert.showAndWait();
-                    return;
+                    return; 
                 }
                 String email = signup_email.getText().toString();
                 
@@ -221,7 +221,7 @@ public class FXMLDocumentController implements Initializable {
                     alert.setContentText("Username is already existed, please choose another username!!!");
                     alert.showAndWait();
                     return;
-                }
+                } 
                 
                 if (!Users.validatePasswordHash(signup_password.getText().toString())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);

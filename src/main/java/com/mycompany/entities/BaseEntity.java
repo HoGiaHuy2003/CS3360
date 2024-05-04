@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class BaseEntity {
     
-    private static final String DATABASE = "CS3360";
+    private static final String DATABASE = "CS3360"; 
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     
@@ -26,7 +26,7 @@ public class BaseEntity {
 
     static void open() {
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + DATABASE, USERNAME, PASSWORD);
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + DATABASE, USERNAME, PASSWORD); // jdbc:mysql://localhost:3306/CS3360/root/
         } catch (SQLException ex) {
             Logger.getLogger(BaseEntity.class.getName()).log(Level.SEVERE, null, ex);
         }

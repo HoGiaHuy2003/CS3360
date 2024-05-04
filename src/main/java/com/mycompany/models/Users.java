@@ -163,7 +163,7 @@ public class Users {
     }
     
     public static Boolean validatePasswordHash(String passwordHash) {
-        Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,15})");
+        Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{6,15})");
         Matcher matcher = pattern.matcher(passwordHash);
         if (matcher.find() && matcher.group().equals(passwordHash)) {
             return true;
