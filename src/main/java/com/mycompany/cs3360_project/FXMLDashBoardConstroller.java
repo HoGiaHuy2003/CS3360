@@ -5,14 +5,21 @@
 package com.mycompany.cs3360_project;
 
 import com.mycompany.entities.RolesEntity;
+import com.mycompany.entities.TicketEntity;
 import com.mycompany.entities.UserRolesEntity;
 import com.mycompany.entities.UsersEntity;
+import com.mycompany.models.Ticket;
 import com.mycompany.models.Users;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,7 +55,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     /**
      * Initializes the controller class.
      */
-      @FXML
+    @FXML
     private Button selectTicket_Btn;
 
     @FXML
@@ -61,10 +68,10 @@ public class FXMLDashBoardConstroller implements Initializable {
     private Button selectTicket_addToCartBtn;
 
     @FXML
-    private TextField selectTicket_airplaneName;
+    private TextField selectTicket_ticketName;
 
     @FXML
-    private TreeTableColumn<?, ?> selectTicket_airplaneNameTable;
+    private TreeTableColumn<?, ?> selectTicket_ticketNameTable;
 
     @FXML
     private ComboBox<?> selectTicket_category;
@@ -290,6 +297,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         setValueForRolesListView();
         
         authorization();
+        
+        comboxCategory();
     }    
     
     @FXML
@@ -574,5 +583,43 @@ public class FXMLDashBoardConstroller implements Initializable {
         if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {
             dashBoard_Btn.setDisable(true);
         }
+    
+    }
+    
+    private String[] catagoryList = {"VIP Ticket", "Normal Ticket"};
+    private void comboxCategory() {
+        List<String> listC = new ArrayList();
+        for(String data: catagoryList) {
+            listC.add(data);
+        }
+        ObservableList listCategory = FXCollections.observableArrayList(listC);
+        selectTicket_category.setItems(listCategory);
+    }
+    @FXML
+    private void addTicket() throws Exception {
+        //TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt
+        //TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt
+        String ticketName = selectTicket_ticketName.getText();
+        String startingPlace = selectTicket_startingPlace.getText();
+        String endingPlace = selectTicket_endingPlace.getText();
+        Float price = Float.valueOf(selectTicket_price.getText());
+        String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
+        Integer categoryId = null;
+        if(categoryName.equals("VIP Ticket")) {
+            categoryId = 1;
+        }
+        else {
+            categoryId = 2;
+        }
+        LocalDate selectedDate = selectTicket_Date.getValue();
+        Date departmentDate = java.sql.Date.valueOf(selectedDate);
+        Date creatAt = null;
+        Date updateAt = null;
+        Integer distance = null;
+        Ticket newTicket = new Ticket(ticketName, categoryId, price, startingPlace, endingPlace, distance, departmentDate, creatAt, updateAt);
+        // Attempt to insert the new ticket into the database
+        TicketEntity.insert(newTicket);
+        System.out.println("Ticket inserted successfully!");
+
     }
 } 

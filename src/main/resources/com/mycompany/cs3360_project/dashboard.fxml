@@ -199,12 +199,12 @@
                      <children>
                         <AnchorPane layoutX="7.0" layoutY="14.0" prefHeight="529.0" prefWidth="266.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
-                              <Label layoutY="56.0" prefHeight="18.0" prefWidth="98.0" text="Airplane Name:">
+                              <Label layoutX="5.0" layoutY="56.0" prefHeight="18.0" prefWidth="98.0" text="Ticket Name:">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="selectTicket_airplaneName" layoutX="112.0" layoutY="48.0" prefHeight="35.0" prefWidth="140.0" styleClass="textField" stylesheets="@designDashboard.css" />
+                              <TextField fx:id="selectTicket_ticketName" layoutX="112.0" layoutY="48.0" prefHeight="35.0" prefWidth="140.0" styleClass="textField" stylesheets="@designDashboard.css" />
                               <TextField fx:id="selectTicket_startingPlace" layoutX="114.0" layoutY="107.0" prefHeight="35.0" prefWidth="140.0" styleClass="textField" stylesheets="@designDashboard.css" />
                               <Label layoutX="45.0" layoutY="217.0" prefHeight="18.0" prefWidth="41.0" text="Price:">
                                  <font>
@@ -212,7 +212,7 @@
                                  </font>
                               </Label>
                               <TextField fx:id="selectTicket_price" layoutX="114.0" layoutY="208.0" prefHeight="35.0" prefWidth="140.0" styleClass="textField" stylesheets="@designDashboard.css" />
-                              <Label layoutX="1.0" layoutY="116.0" prefHeight="18.0" prefWidth="90.0" text="Starting Place:">
+                              <Label layoutX="6.0" layoutY="116.0" prefHeight="18.0" prefWidth="90.0" text="Starting Place:">
                                  <font>
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
@@ -255,14 +255,14 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="selectTicket_category" layoutX="115.0" layoutY="255.0" prefHeight="26.0" prefWidth="147.0" />
+                              <ComboBox fx:id="selectTicket_category" layoutX="115.0" layoutY="255.0" prefHeight="26.0" prefWidth="147.0" promptText="Choose" />
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="277.0" layoutY="14.0" prefHeight="530.0" prefWidth="618.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
                               <TreeTableView fx:id="selectTicket_tableView" layoutX="7.0" layoutY="67.0" prefHeight="397.0" prefWidth="610.0" styleClass="table-view" stylesheets="@designDashboard.css">
                                 <columns>
-                                  <TreeTableColumn fx:id="selectTicket_airplaneNameTable" prefWidth="112.79998779296875" text="Airplane Name" />
+                                  <TreeTableColumn fx:id="selectTicket_ticketNameTable" prefWidth="112.79998779296875" text="TicketName" />
                                   <TreeTableColumn fx:id="selectTicket_categoryTable" minWidth="8.0" prefWidth="96.79998779296875" text="Category" />
                                     <TreeTableColumn fx:id="selectTicket_priceTable" prefWidth="70.39996337890625" text="Price" />
                                     <TreeTableColumn fx:id="selectTicket_startingPlaceTable" prefWidth="108.800048828125" text="Starting Place" />
@@ -296,7 +296,7 @@
                                           <Font name="Tahoma" size="18.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="selectTicket_searchCategory" layoutX="5.0" layoutY="30.0" prefHeight="26.0" prefWidth="98.0" promptText="Category" />
+                                    <ComboBox fx:id="selectTicket_searchCategory" layoutX="5.0" layoutY="28.0" prefHeight="26.0" prefWidth="98.0" promptText="Category" />
                                  </children>
                               </AnchorPane>
                            </children></AnchorPane>

@@ -40,7 +40,19 @@ public class Ticket {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
-
+    //TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt
+    public Ticket(String ticketName, Integer categoryID,Float price, String startingPlace, String endingPlace, Integer distance, Date departmentTime, Date creatAt, Date updateAt) {
+        this.ticketName = ticketName;
+        this.categoryId = categoryID;
+        this.price = price;
+        this.startingPlace = startingPlace;
+        this.endingPlace = endingPlace;
+        this.distance = distance;
+        this.departmentTime = departmentTime;
+        this.createdAt = creatAt;
+        this.updatedAt = updateAt;
+        
+    }
     public Integer getTicketId() {
         return ticketId;
     }
