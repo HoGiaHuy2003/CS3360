@@ -4,6 +4,7 @@
  */
 package com.mycompany.cs3360_project;
 
+import com.mycompany.entities.CategoryEntity;
 import com.mycompany.entities.RolesEntity;
 import com.mycompany.entities.TicketEntity;
 import com.mycompany.entities.UserRolesEntity;
@@ -13,7 +14,9 @@ import com.mycompany.models.Users;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,8 +42,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -71,25 +72,25 @@ public class FXMLDashBoardConstroller implements Initializable {
     private TextField selectTicket_ticketName;
 
     @FXML
-    private TreeTableColumn<?, ?> selectTicket_ticketNameTable;
+    private TableColumn<Ticket, String> selectTicket_ticketNameTable;
 
     @FXML
-    private ComboBox<?> selectTicket_category;
+    private ComboBox selectTicket_category;
 
     @FXML
-    private TreeTableColumn<?, ?> selectTicket_categoryTable;
+    private TableColumn<Ticket, String> selectTicket_categoryTable;
 
     @FXML
     private Button selectTicket_deleteBtn;
 
     @FXML
-    private TreeTableColumn<?, ?> selectTicket_departmentTimeTable;
+    private TableColumn<Ticket, Date> selectTicket_departmentTimeTable;
 
     @FXML
     private TextField selectTicket_endingPlace;
 
     @FXML
-    private TreeTableColumn<?, ?> selectTicket_endingPlaceBtn;
+    private TableColumn<Ticket, String> selectTicket_endingPlaceBtn;
 
     @FXML
     private AnchorPane selectTicket_form;
@@ -98,13 +99,13 @@ public class FXMLDashBoardConstroller implements Initializable {
     private TextField selectTicket_price;
 
     @FXML
-    private TreeTableColumn<?, ?> selectTicket_priceTable;
+    private TableColumn<Ticket, Float> selectTicket_priceTable;
 
     @FXML
     private Button selectTicket_resetBtn;
 
     @FXML
-    private ComboBox<?> selectTicket_searchCategory;
+    private ComboBox<String> selectTicket_searchCategory;
 
     @FXML
     private Button selectTicket_selectTicketBtn;
@@ -113,10 +114,10 @@ public class FXMLDashBoardConstroller implements Initializable {
     private TextField selectTicket_startingPlace;
 
     @FXML
-    private TreeTableColumn<?, ?> selectTicket_startingPlaceTable;
+    private TableColumn<Ticket, Float> selectTicket_startingPlaceTable;
 
     @FXML
-    private TreeTableView<?> selectTicket_tableView;
+    private TableView<Ticket> selectTicket_tableView;
 
     @FXML
     private Button selectTicket_updateBtn;
@@ -297,6 +298,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         setValueForRolesListView();
         
         authorization();
+        
+        setValueForTicketTableView();
         
         comboxCategory();
     }    
@@ -563,7 +566,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private void deleteAccount() throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete this staff: ");
+        alert.setTitle("Delete this account: ");
         alert.setHeaderText("Are you sure want to delete your account?");
 
         Optional<ButtonType> option = alert.showAndWait();
@@ -586,15 +589,47 @@ public class FXMLDashBoardConstroller implements Initializable {
     
     }
     
-    private String[] catagoryList = {"VIP Ticket", "Normal Ticket"};
+    
+//    private String[] catagoryList = {"VIP Ticket", "Normal Ticket"};
     private void comboxCategory() {
-        List<String> listC = new ArrayList();
-        for(String data: catagoryList) {
-            listC.add(data);
+//        List<String> listC = new ArrayList();
+//        for(String data: catagoryList) {
+//            listC.add(data);
+//        }
+//        ObservableList listCategory = FXCollections.observableArrayList(listC);
+//        selectTicket_category.setItems(listCategory);
+        selectTicket_category.getItems().clear();
+        selectTicket_searchCategory.getItems().clear();
+        List<Ticket> categoryList = CategoryEntity.getCategoryList();
+        for (int i = 0; i < categoryList.size(); i++) {
+            selectTicket_category.getItems().addAll(categoryList.get(i).getCategoryName());
+            selectTicket_category.getSelectionModel().select(null);
+            selectTicket_searchCategory.getItems().addAll(categoryList.get(i).getCategoryName());
+            selectTicket_searchCategory.getSelectionModel().select(null);
         }
-        ObservableList listCategory = FXCollections.observableArrayList(listC);
-        selectTicket_category.setItems(listCategory);
     }
+    
+    @FXML
+    private void setValueForTicketTableView() {
+        ObservableList<Ticket> ticketList = TicketEntity.index();
+        List<Ticket> categoryList = CategoryEntity.getCategoryList();
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).getCategoryName().equals(selectTicket_searchCategory.getValue())) {
+                Integer categoryId = categoryList.get(i).getCategoryId();
+                ticketList = TicketEntity.findByCategory(categoryId);
+                break;
+            }
+        }
+        selectTicket_ticketNameTable.setCellValueFactory(new PropertyValueFactory<>("ticketName"));
+        selectTicket_categoryTable.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
+        selectTicket_priceTable.setCellValueFactory(new PropertyValueFactory<>("price"));
+        selectTicket_startingPlaceTable.setCellValueFactory(new PropertyValueFactory<>("startingPlace"));
+        selectTicket_endingPlaceBtn.setCellValueFactory(new PropertyValueFactory<>("endingPlace"));
+        selectTicket_departmentTimeTable.setCellValueFactory(new PropertyValueFactory<>("departmentTime"));
+        
+        selectTicket_tableView.setItems(ticketList);
+    }
+    
     @FXML
     private void addTicket() throws Exception {
         //TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt
@@ -605,21 +640,113 @@ public class FXMLDashBoardConstroller implements Initializable {
         Float price = Float.valueOf(selectTicket_price.getText());
         String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
         Integer categoryId = null;
-        if(categoryName.equals("VIP Ticket")) {
-            categoryId = 1;
+        List<Ticket> categoryList = CategoryEntity.getCategoryList();
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).getCategoryName().equals(categoryName)) {
+                categoryId = categoryList.get(i).getCategoryId();
+                break;
+            }
         }
-        else {
-            categoryId = 2;
-        }
+//        if(categoryName.equals("VIP Ticket")) {
+//            categoryId = 1;
+//        }
+//        else {
+//            categoryId = 2;
+//        }
         LocalDate selectedDate = selectTicket_Date.getValue();
         Date departmentDate = java.sql.Date.valueOf(selectedDate);
-        Date creatAt = null;
-        Date updateAt = null;
+        Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date updateAt = creatAt;
         Integer distance = null;
-        Ticket newTicket = new Ticket(ticketName, categoryId, price, startingPlace, endingPlace, distance, departmentDate, creatAt, updateAt);
+        Ticket newTicket = new Ticket(ticketName, categoryId, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
         // Attempt to insert the new ticket into the database
         TicketEntity.insert(newTicket);
         System.out.println("Ticket inserted successfully!");
-
+        setValueForTicketTableView();
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!!!");
+        alert.setHeaderText("Ticket is added successfully!!!");
+        alert.setContentText("Ticket added is: " + newTicket.getTicketName());
+        alert.showAndWait();
+    }
+    
+    @FXML
+    private void selectTicket() {
+        ObservableList<Ticket> ticketList = TicketEntity.index();
+        Integer sizeOfTicketList = ticketList.size();
+        for (int i = 0; i < sizeOfTicketList; i++) {
+            if (selectTicket_tableView.getSelectionModel().getSelectedItem().getTicketId() == ticketList.get(i).getTicketId()) {
+                Ticket.setSelectedTicketId(ticketList.get(i).getTicketId());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success!!!");
+                alert.setHeaderText("Selected ticket successfully!!!");
+                alert.setContentText("Ticket is selected: " + ticketList.get(i).getTicketName());
+                alert.showAndWait();
+                break;
+            }
+        }
+        
+        System.out.println(Ticket.getSelectedTicketId());
+        
+        if (Ticket.getSelectedTicketId() != null) {
+            Ticket ticketSelected = TicketEntity.details(Ticket.getSelectedTicketId());
+            selectTicket_ticketName.setText(ticketSelected.getTicketName());
+            selectTicket_startingPlace.setText(ticketSelected.getStartingPlace());
+            selectTicket_endingPlace.setText(ticketSelected.getEndingPlace());
+            selectTicket_price.setText(ticketSelected.getPrice().toString());
+            selectTicket_category.setValue(ticketSelected.getCategoryName());
+            
+            Instant instant = Instant.ofEpochMilli(ticketSelected.getDepartmentTime().getTime());
+            selectTicket_Date.setValue(instant.atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+    }
+    
+    @FXML
+    private void updateTicket() {
+        String ticketName = selectTicket_ticketName.getText();
+        String startingPlace = selectTicket_startingPlace.getText();
+        String endingPlace = selectTicket_endingPlace.getText();
+        Float price = Float.valueOf(selectTicket_price.getText());
+        String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
+        Integer categoryId = null;
+        List<Ticket> categoryList = CategoryEntity.getCategoryList();
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).getCategoryName().equals(categoryName)) {
+                categoryId = categoryList.get(i).getCategoryId();
+                break;
+            }
+        }
+//        if(categoryName.equals("VIP Ticket")) {
+//            categoryId = 1;
+//        }
+//        else {
+//            categoryId = 2;
+//        }
+        LocalDate selectedDate = selectTicket_Date.getValue();
+        Date departmentDate = java.sql.Date.valueOf(selectedDate);
+        Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date updateAt = creatAt;
+        Integer distance = null;
+        Ticket updateTicket = new Ticket(ticketName, categoryId, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
+        if (Ticket.getSelectedTicketId() == null) {
+            // ERROR CANNOT EDITED BECAUSE NO TICKET IS SELECTED TO DELETE
+            return;
+        }
+        updateTicket.setTicketId(Ticket.getSelectedTicketId());
+        // Attempt to insert the new ticket into the database
+        TicketEntity.update(updateTicket);
+        System.out.println("Ticket updated successfully!");
+        setValueForTicketTableView();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!!!");
+        alert.setHeaderText("Ticket is updated successfully!!!");
+        alert.setContentText("Ticket updated is: " + updateTicket.getTicketName());
+        alert.showAndWait();
+    }
+    
+    @FXML 
+    private void deleteTicket() {
+        
     }
 } 

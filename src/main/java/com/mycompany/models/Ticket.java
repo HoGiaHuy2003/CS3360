@@ -21,8 +21,6 @@ public class Ticket {
     
     private String endingPlace;
     
-    private Integer distance;
-    
     private Date departmentTime;
     
     private Integer categoryId;
@@ -32,6 +30,16 @@ public class Ticket {
     private Date createdAt;
     
     private Date updatedAt;
+    
+    private static Integer selectedTicketId;
+
+    public static Integer getSelectedTicketId() {
+        return selectedTicketId;
+    }
+
+    public static void setSelectedTicketId(Integer selectedTicketId) {
+        Ticket.selectedTicketId = selectedTicketId;
+    }
 
     public Ticket() {
     }
@@ -41,13 +49,12 @@ public class Ticket {
         this.categoryName = categoryName;
     }
     //TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt
-    public Ticket(String ticketName, Integer categoryID,Float price, String startingPlace, String endingPlace, Integer distance, Date departmentTime, Date creatAt, Date updateAt) {
+    public Ticket(String ticketName, Integer categoryID,Float price, String startingPlace, String endingPlace, Date departmentTime, Date creatAt, Date updateAt) {
         this.ticketName = ticketName;
         this.categoryId = categoryID;
         this.price = price;
         this.startingPlace = startingPlace;
         this.endingPlace = endingPlace;
-        this.distance = distance;
         this.departmentTime = departmentTime;
         this.createdAt = creatAt;
         this.updatedAt = updateAt;
@@ -91,14 +98,6 @@ public class Ticket {
 
     public void setEndingPlace(String endingPlace) {
         this.endingPlace = endingPlace;
-    }
-
-    public Integer getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Integer distance) {
-        this.distance = distance;
     }
 
     public Date getDepartmentTime() {

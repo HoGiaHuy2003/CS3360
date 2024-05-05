@@ -25,7 +25,7 @@ public class TicketEntity extends BaseEntity {
         open();
 
         try {
-            String sql = "INSERT INTO Ticket (TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Ticket (TicketName, CategoryId, Price, StartingPlace, EndingPlace, DepartmentTime ,CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             statement = conn.prepareStatement(sql);
             
             statement.setString(1, newTicket.getTicketName());
@@ -33,10 +33,9 @@ public class TicketEntity extends BaseEntity {
             statement.setFloat(3, newTicket.getPrice());
             statement.setString(4, newTicket.getStartingPlace());
             statement.setString(5, newTicket.getEndingPlace());
-            statement.setInt(6, newTicket.getDistance());
-            statement.setDate(7, (Date) newTicket.getDepartmentTime());
-            statement.setDate(8, (Date) newTicket.getCreatedAt());
-            statement.setDate(9, (Date) newTicket.getUpdatedAt());
+            statement.setDate(6, new Date (newTicket.getDepartmentTime().getTime()));
+            statement.setDate(7, new Date (newTicket.getCreatedAt().getTime()));
+            statement.setDate(8, new Date (newTicket.getUpdatedAt().getTime()));
             
             statement.execute();
         } catch (SQLException ex) {
@@ -50,7 +49,7 @@ public class TicketEntity extends BaseEntity {
         open();
 
         try {
-            String sql = "UPDATE Ticket  SET TicketName = ?, CategoryId = ?, Price = ?, StartingPlace = ?, EndingPlace = ?, Distance = ?, DepartmentTime = ?, UpdatedAt = ?) WHERE TicketId = ?";
+            String sql = "UPDATE Ticket SET TicketName = ?, CategoryId = ?, Price = ?, StartingPlace = ?, EndingPlace = ?, DepartmentTime = ?, UpdatedAt = ? WHERE TicketId = ?";
             statement = conn.prepareStatement(sql);
             
             statement.setString(1, updateTicket.getTicketName());
@@ -58,10 +57,9 @@ public class TicketEntity extends BaseEntity {
             statement.setFloat(3, updateTicket.getPrice());
             statement.setString(4, updateTicket.getStartingPlace());
             statement.setString(5, updateTicket.getEndingPlace());
-            statement.setInt(6, updateTicket.getDistance());
-            statement.setDate(7, (Date) updateTicket.getDepartmentTime());
-            statement.setDate(8, (Date) updateTicket.getUpdatedAt());
-            statement.setInt(9, updateTicket.getTicketId());
+            statement.setDate(6, new Date (updateTicket.getDepartmentTime().getTime()));
+            statement.setDate(7, new Date (updateTicket.getUpdatedAt().getTime()));
+            statement.setInt(8, updateTicket.getTicketId());
             
             statement.execute();
         } catch (SQLException ex) {
@@ -102,12 +100,12 @@ public class TicketEntity extends BaseEntity {
             
             while (resultSet.next()) {
                 Ticket ticket = new Ticket();
+                ticket.setTicketId(resultSet.getInt("TicketId"));
                 ticket.setTicketName(resultSet.getString("TicketName"));
                 ticket.setCategoryName(resultSet.getString("CategoryName"));
                 ticket.setPrice(resultSet.getFloat("Price"));
                 ticket.setStartingPlace(resultSet.getString("StartingPlace"));
                 ticket.setEndingPlace(resultSet.getString("EndingPlace"));
-                ticket.setDistance(resultSet.getInt("Distance"));
                 ticket.setDepartmentTime(resultSet.getDate("DepartmentTime"));
                 ticket.setCreatedAt(resultSet.getDate("CreatedAt"));
                 ticket.setUpdatedAt(resultSet.getDate("UpdatedAt"));
@@ -125,4 +123,76 @@ public class TicketEntity extends BaseEntity {
 
         return dataList;
     } 
+    
+    public static ObservableList<Ticket> index() {
+        List<Ticket> ticketList = new Vector<>();
+        
+        open();
+        
+        String sql = "SELECT Ticket.*, Category.CategoryName FROM Ticket LEFT JOIN Category ON Ticket.CategoryId = Category.CategoryId";
+        try {
+            statement = conn.prepareStatement(sql);
+        
+            ResultSet resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+                Ticket ticket = new Ticket();
+                ticket.setTicketId(resultSet.getInt("TicketId"));
+                ticket.setTicketName(resultSet.getString("TicketName"));
+                ticket.setCategoryName(resultSet.getString("CategoryName"));
+                ticket.setPrice(resultSet.getFloat("Price"));
+                ticket.setStartingPlace(resultSet.getString("StartingPlace"));
+                ticket.setEndingPlace(resultSet.getString("EndingPlace"));
+                ticket.setDepartmentTime(resultSet.getDate("DepartmentTime"));
+                ticket.setCreatedAt(resultSet.getDate("CreatedAt"));
+                ticket.setUpdatedAt(resultSet.getDate("UpdatedAt"));
+                
+                ticketList.add(ticket);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UsersEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+        
+        ObservableList<Ticket> dataList = FXCollections.observableList(ticketList);
+
+        return dataList;
+    } 
+    
+    public static Ticket details (Integer TicketId) {
+        Ticket ticket = null;
+        
+        open();
+        
+        String sql = "SELECT Ticket.*, Category.CategoryName FROM Ticket LEFT JOIN Category ON Ticket.CategoryId = Category.CategoryId WHERE Ticket.TicketId = ?";
+        try {
+            statement = conn.prepareStatement(sql);
+            
+            statement.setInt(1, TicketId);
+        
+            ResultSet resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                ticket = new Ticket();
+                ticket.setTicketId(resultSet.getInt("TicketId"));
+                ticket.setTicketName(resultSet.getString("TicketName"));
+                ticket.setCategoryName(resultSet.getString("CategoryName"));
+                ticket.setPrice(resultSet.getFloat("Price"));
+                ticket.setStartingPlace(resultSet.getString("StartingPlace"));
+                ticket.setEndingPlace(resultSet.getString("EndingPlace"));
+                ticket.setDepartmentTime(resultSet.getDate("DepartmentTime"));
+                ticket.setCreatedAt(resultSet.getDate("CreatedAt"));
+                ticket.setUpdatedAt(resultSet.getDate("UpdatedAt")); 
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UsersEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+        
+        return ticket;
+    }
 }

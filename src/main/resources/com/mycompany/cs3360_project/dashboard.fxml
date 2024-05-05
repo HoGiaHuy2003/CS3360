@@ -13,8 +13,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.paint.Color?>
@@ -22,7 +20,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="main_form" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.cs3360_project.FXMLDashBoardConstroller">
+<AnchorPane id="AnchorPane" fx:id="main_form" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.cs3360_project.FXMLDashBoardConstroller">
    <children>
       <BorderPane layoutX="255.0" layoutY="100.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -223,8 +221,8 @@
                                     <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="selectTicket_addBtn" layoutX="41.0" layoutY="371.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="77.0" styleClass="add-btn" stylesheets="@designDashboard.css" text="Add" />
-                              <Button fx:id="selectTicket_updateBtn" layoutX="150.0" layoutY="371.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="77.0" styleClass="update-btn" stylesheets="@designDashboard.css" text="Update">
+                              <Button fx:id="selectTicket_addBtn" layoutX="41.0" layoutY="371.0" mnemonicParsing="false" onAction="#addTicket" prefHeight="42.0" prefWidth="77.0" styleClass="add-btn" stylesheets="@designDashboard.css" text="Add" />
+                              <Button fx:id="selectTicket_updateBtn" layoutX="150.0" layoutY="371.0" mnemonicParsing="false" onAction="#updateTicket" prefHeight="42.0" prefWidth="77.0" styleClass="update-btn" stylesheets="@designDashboard.css" text="Update">
                                  <textFill>
                                     <LinearGradient endX="1.0" endY="1.0">
                                        <stops>
@@ -260,17 +258,17 @@
                         </AnchorPane>
                         <AnchorPane layoutX="277.0" layoutY="14.0" prefHeight="530.0" prefWidth="618.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
-                              <TreeTableView fx:id="selectTicket_tableView" layoutX="7.0" layoutY="67.0" prefHeight="397.0" prefWidth="610.0" styleClass="table-view" stylesheets="@designDashboard.css">
+                              <TableView fx:id="selectTicket_tableView" layoutX="7.0" layoutY="67.0" prefHeight="397.0" prefWidth="610.0" styleClass="table-view" stylesheets="@designDashboard.css">
                                 <columns>
-                                  <TreeTableColumn fx:id="selectTicket_ticketNameTable" prefWidth="112.79998779296875" text="TicketName" />
-                                  <TreeTableColumn fx:id="selectTicket_categoryTable" minWidth="8.0" prefWidth="96.79998779296875" text="Category" />
-                                    <TreeTableColumn fx:id="selectTicket_priceTable" prefWidth="70.39996337890625" text="Price" />
-                                    <TreeTableColumn fx:id="selectTicket_startingPlaceTable" prefWidth="108.800048828125" text="Starting Place" />
-                                    <TreeTableColumn fx:id="selectTicket_endingPlaceBtn" prefWidth="100.7999267578125" text="Ending Place" />
-                                    <TreeTableColumn fx:id="selectTicket_departmentTimeTable" prefWidth="123.2000732421875" text="Department Time" />
+                                  <TableColumn fx:id="selectTicket_ticketNameTable" prefWidth="112.79998779296875" text="TicketName" />
+                                  <TableColumn fx:id="selectTicket_categoryTable" minWidth="8.0" prefWidth="96.79998779296875" text="Category" />
+                                    <TableColumn fx:id="selectTicket_priceTable" prefWidth="70.39996337890625" text="Price" />
+                                    <TableColumn fx:id="selectTicket_startingPlaceTable" prefWidth="108.800048828125" text="Starting Place" />
+                                    <TableColumn fx:id="selectTicket_endingPlaceBtn" prefWidth="100.7999267578125" text="Ending Place" />
+                                    <TableColumn fx:id="selectTicket_departmentTimeTable" prefWidth="123.2000732421875" text="Department Time" />
                                 </columns>
-                              </TreeTableView>
-                              <Button fx:id="selectTicket_selectTicketBtn" layoutX="351.0" layoutY="477.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="116.0" styleClass="update-btn" stylesheets="@designDashboard.css" text="Select Ticket">
+                              </TableView>
+                              <Button fx:id="selectTicket_selectTicketBtn" layoutX="351.0" layoutY="477.0" mnemonicParsing="false" onAction="#selectTicket" prefHeight="42.0" prefWidth="116.0" styleClass="update-btn" stylesheets="@designDashboard.css" text="Select Ticket">
                                  <textFill>
                                     <LinearGradient endX="1.0" endY="1.0">
                                        <stops>
@@ -296,7 +294,7 @@
                                           <Font name="Tahoma" size="18.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="selectTicket_searchCategory" layoutX="5.0" layoutY="28.0" prefHeight="26.0" prefWidth="98.0" promptText="Category" />
+                                    <ComboBox fx:id="selectTicket_searchCategory" layoutX="5.0" layoutY="28.0" onAction="#setValueForTicketTableView" prefHeight="26.0" prefWidth="98.0" promptText="Category" />
                                  </children>
                               </AnchorPane>
                            </children></AnchorPane>
