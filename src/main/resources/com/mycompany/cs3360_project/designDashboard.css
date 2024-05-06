@@ -236,3 +236,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .receipt-btn:hover {
     -fx-background-color: #c5c76c;
 }
+.user-infor {
+    -fx-background-color: #710505;
+}
