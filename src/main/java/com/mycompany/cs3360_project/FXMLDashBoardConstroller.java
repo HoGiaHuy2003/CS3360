@@ -301,7 +301,11 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         setValueForTicketTableView();
         
+        disableUpdateAndDelete();
+        
         comboxCategory();
+        
+        setTicketForUpdatedForm();
     }    
     
     @FXML
@@ -546,6 +550,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         main_form.getScene().getWindow().hide();
         Users.setLoginUserId(null);
         Users.setSelectedUserId(null);
+        Ticket.setSelectedTicketId(null);
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         Stage stage = new Stage();
         Scene scene = new Scene(root);
@@ -630,6 +635,17 @@ public class FXMLDashBoardConstroller implements Initializable {
         selectTicket_tableView.setItems(ticketList);
     }
     
+    private void disableUpdateAndDelete() {
+        selectTicket_updateBtn.setDisable(false);
+        selectTicket_deleteBtn.setDisable(false);
+        selectTicket_resetBtn.setDisable(false);
+        if (Ticket.getSelectedTicketId() == null) {
+            selectTicket_updateBtn.setDisable(true);
+            selectTicket_deleteBtn.setDisable(true);
+            selectTicket_resetBtn.setDisable(true);
+        }
+    }
+    
     @FXML
     private void addTicket() throws Exception {
         //TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt
@@ -688,7 +704,12 @@ public class FXMLDashBoardConstroller implements Initializable {
         }
         
         System.out.println(Ticket.getSelectedTicketId());
+        setTicketForUpdatedForm();
         
+        disableUpdateAndDelete();
+    }
+    
+    private void setTicketForUpdatedForm() {
         if (Ticket.getSelectedTicketId() != null) {
             Ticket ticketSelected = TicketEntity.details(Ticket.getSelectedTicketId());
             selectTicket_ticketName.setText(ticketSelected.getTicketName());
@@ -696,7 +717,7 @@ public class FXMLDashBoardConstroller implements Initializable {
             selectTicket_endingPlace.setText(ticketSelected.getEndingPlace());
             selectTicket_price.setText(ticketSelected.getPrice().toString());
             selectTicket_category.setValue(ticketSelected.getCategoryName());
-            
+
             Instant instant = Instant.ofEpochMilli(ticketSelected.getDepartmentTime().getTime());
             selectTicket_Date.setValue(instant.atZone(ZoneId.systemDefault()).toLocalDate());
         }
@@ -742,6 +763,16 @@ public class FXMLDashBoardConstroller implements Initializable {
         alert.setTitle("Success!!!");
         alert.setHeaderText("Ticket is updated successfully!!!");
         alert.setContentText("Ticket updated is: " + updateTicket.getTicketName());
+        alert.showAndWait();
+    }
+    
+    @FXML
+    private void resetTicket() {
+        Ticket.setSelectedTicketId(null);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!!!");
+        alert.setHeaderText("Ticket is unselected successfully!!!");
+        alert.setContentText("Ticket is unselected!");
         alert.showAndWait();
     }
     
