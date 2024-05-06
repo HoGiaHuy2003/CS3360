@@ -720,6 +720,14 @@ public class FXMLDashBoardConstroller implements Initializable {
 
             Instant instant = Instant.ofEpochMilli(ticketSelected.getDepartmentTime().getTime());
             selectTicket_Date.setValue(instant.atZone(ZoneId.systemDefault()).toLocalDate());
+        } 
+        else {
+            selectTicket_ticketName.setText(null);
+            selectTicket_startingPlace.setText(null);
+            selectTicket_endingPlace.setText(null);
+            selectTicket_price.setText(null);
+            selectTicket_category.setValue(null);
+            selectTicket_Date.setValue(null);
         }
     }
     
@@ -769,6 +777,8 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private void resetTicket() {
         Ticket.setSelectedTicketId(null);
+        disableUpdateAndDelete();
+        setTicketForUpdatedForm();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success!!!");
         alert.setHeaderText("Ticket is unselected successfully!!!");
