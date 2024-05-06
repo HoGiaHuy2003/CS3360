@@ -24,8 +24,8 @@ import javafx.collections.ObservableList;
  * @author Admin
  */
 public class CategoryEntity {
-    public static List<Ticket> getCategoryList() {
-        List<Ticket> categoryList = new Vector<>();
+    public static List<Category> getCategoryList() {
+        List<Category> categoryList = new Vector<>();
 
         open();
 
@@ -35,7 +35,7 @@ public class CategoryEntity {
             
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
-                Ticket category = new Ticket(resultSet.getInt("CategoryId"), resultSet.getString("CategoryName"));
+                Category category = new Category(resultSet.getInt("CategoryId"), resultSet.getString("CategoryName"));
                 categoryList.add(category);
             }
         } catch (SQLException ex) {
@@ -44,7 +44,7 @@ public class CategoryEntity {
             close();
         }
         
-        ObservableList<Ticket> dataList = FXCollections.observableList(categoryList);
+        ObservableList<Category> dataList = FXCollections.observableList(categoryList);
         
         return dataList;
     }

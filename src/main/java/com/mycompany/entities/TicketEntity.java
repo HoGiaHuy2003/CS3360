@@ -4,6 +4,7 @@
  */
 package com.mycompany.entities;
 
+import com.mycompany.models.Category;
 import com.mycompany.models.Ticket;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -29,7 +30,7 @@ public class TicketEntity extends BaseEntity {
             statement = conn.prepareStatement(sql);
             
             statement.setString(1, newTicket.getTicketName());
-            statement.setInt(2, newTicket.getCategoryId());
+            statement.setInt(2, newTicket.getCategory().getCategoryId());
             statement.setFloat(3, newTicket.getPrice());
             statement.setString(4, newTicket.getStartingPlace());
             statement.setString(5, newTicket.getEndingPlace());
@@ -53,7 +54,7 @@ public class TicketEntity extends BaseEntity {
             statement = conn.prepareStatement(sql);
             
             statement.setString(1, updateTicket.getTicketName());
-            statement.setInt(2, updateTicket.getCategoryId());
+            statement.setInt(2, updateTicket.getCategory().getCategoryId());
             statement.setFloat(3, updateTicket.getPrice());
             statement.setString(4, updateTicket.getStartingPlace());
             statement.setString(5, updateTicket.getEndingPlace());
@@ -102,7 +103,8 @@ public class TicketEntity extends BaseEntity {
                 Ticket ticket = new Ticket();
                 ticket.setTicketId(resultSet.getInt("TicketId"));
                 ticket.setTicketName(resultSet.getString("TicketName"));
-                ticket.setCategoryName(resultSet.getString("CategoryName"));
+                Category category = new Category(resultSet.getInt("CategoryId"), resultSet.getString("CategoryName"));
+                ticket.setCategory(category);
                 ticket.setPrice(resultSet.getFloat("Price"));
                 ticket.setStartingPlace(resultSet.getString("StartingPlace"));
                 ticket.setEndingPlace(resultSet.getString("EndingPlace"));
@@ -139,15 +141,14 @@ public class TicketEntity extends BaseEntity {
                 Ticket ticket = new Ticket();
                 ticket.setTicketId(resultSet.getInt("TicketId"));
                 ticket.setTicketName(resultSet.getString("TicketName"));
-                ticket.setCategoryName(resultSet.getString("CategoryName"));
+                Category category = new Category(resultSet.getInt("CategoryId"), resultSet.getString("CategoryName"));
+                ticket.setCategory(category);
                 ticket.setPrice(resultSet.getFloat("Price"));
                 ticket.setStartingPlace(resultSet.getString("StartingPlace"));
                 ticket.setEndingPlace(resultSet.getString("EndingPlace"));
                 ticket.setDepartmentTime(resultSet.getDate("DepartmentTime"));
                 ticket.setCreatedAt(resultSet.getDate("CreatedAt"));
                 ticket.setUpdatedAt(resultSet.getDate("UpdatedAt"));
-                
-                ticketList.add(ticket);
             }
             
         } catch (SQLException ex) {
@@ -178,7 +179,8 @@ public class TicketEntity extends BaseEntity {
                 ticket = new Ticket();
                 ticket.setTicketId(resultSet.getInt("TicketId"));
                 ticket.setTicketName(resultSet.getString("TicketName"));
-                ticket.setCategoryName(resultSet.getString("CategoryName"));
+                Category category = new Category(resultSet.getInt("CategoryId"), resultSet.getString("CategoryName"));
+                ticket.setCategory(category);
                 ticket.setPrice(resultSet.getFloat("Price"));
                 ticket.setStartingPlace(resultSet.getString("StartingPlace"));
                 ticket.setEndingPlace(resultSet.getString("EndingPlace"));

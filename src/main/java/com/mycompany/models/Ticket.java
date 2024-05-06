@@ -23,9 +23,7 @@ public class Ticket {
     
     private Date departmentTime;
     
-    private Integer categoryId;
-    
-    private String categoryName;
+    private Category category;
     
     private Date createdAt;
     
@@ -44,14 +42,10 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(Integer categoryId, String categoryName) {
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
-    }
     //TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt
-    public Ticket(String ticketName, Integer categoryID,Float price, String startingPlace, String endingPlace, Date departmentTime, Date creatAt, Date updateAt) {
+    public Ticket(String ticketName, Category category ,Float price, String startingPlace, String endingPlace, Date departmentTime, Date creatAt, Date updateAt) {
         this.ticketName = ticketName;
-        this.categoryId = categoryID;
+        this.category = category;
         this.price = price;
         this.startingPlace = startingPlace;
         this.endingPlace = endingPlace;
@@ -108,22 +102,14 @@ public class Ticket {
         this.departmentTime = departmentTime;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
+    
     public Date getCreatedAt() {
         return createdAt;
     }

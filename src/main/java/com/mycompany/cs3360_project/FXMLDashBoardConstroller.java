@@ -9,6 +9,7 @@ import com.mycompany.entities.RolesEntity;
 import com.mycompany.entities.TicketEntity;
 import com.mycompany.entities.UserRolesEntity;
 import com.mycompany.entities.UsersEntity;
+import com.mycompany.models.Category;
 import com.mycompany.models.Ticket;
 import com.mycompany.models.Users;
 import java.io.IOException;
@@ -605,7 +606,7 @@ public class FXMLDashBoardConstroller implements Initializable {
 //        selectTicket_category.setItems(listCategory);
         selectTicket_category.getItems().clear();
         selectTicket_searchCategory.getItems().clear();
-        List<Ticket> categoryList = CategoryEntity.getCategoryList();
+        List<Category> categoryList = CategoryEntity.getCategoryList();
         for (int i = 0; i < categoryList.size(); i++) {
             selectTicket_category.getItems().addAll(categoryList.get(i).getCategoryName());
             selectTicket_category.getSelectionModel().select(null);
@@ -617,7 +618,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private void setValueForTicketTableView() {
         ObservableList<Ticket> ticketList = TicketEntity.index();
-        List<Ticket> categoryList = CategoryEntity.getCategoryList();
+        List<Category> categoryList = CategoryEntity.getCategoryList();
         for (int i = 0; i < categoryList.size(); i++) {
             if (categoryList.get(i).getCategoryName().equals(selectTicket_searchCategory.getValue())) {
                 Integer categoryId = categoryList.get(i).getCategoryId();
@@ -656,7 +657,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         Float price = Float.valueOf(selectTicket_price.getText());
         String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
         Integer categoryId = null;
-        List<Ticket> categoryList = CategoryEntity.getCategoryList();
+        List<Category> categoryList = CategoryEntity.getCategoryList();
         for (int i = 0; i < categoryList.size(); i++) {
             if (categoryList.get(i).getCategoryName().equals(categoryName)) {
                 categoryId = categoryList.get(i).getCategoryId();
@@ -674,7 +675,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date updateAt = creatAt;
         Integer distance = null;
-        Ticket newTicket = new Ticket(ticketName, categoryId, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
+        Category category = new Category(categoryId, categoryName);
+        Ticket newTicket = new Ticket(ticketName, category, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
         // Attempt to insert the new ticket into the database
         TicketEntity.insert(newTicket);
         System.out.println("Ticket inserted successfully!");
@@ -716,7 +718,7 @@ public class FXMLDashBoardConstroller implements Initializable {
             selectTicket_startingPlace.setText(ticketSelected.getStartingPlace());
             selectTicket_endingPlace.setText(ticketSelected.getEndingPlace());
             selectTicket_price.setText(ticketSelected.getPrice().toString());
-            selectTicket_category.setValue(ticketSelected.getCategoryName());
+            selectTicket_category.setValue(ticketSelected.getCategory().getCategoryName());
 
             Instant instant = Instant.ofEpochMilli(ticketSelected.getDepartmentTime().getTime());
             selectTicket_Date.setValue(instant.atZone(ZoneId.systemDefault()).toLocalDate());
@@ -739,7 +741,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         Float price = Float.valueOf(selectTicket_price.getText());
         String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
         Integer categoryId = null;
-        List<Ticket> categoryList = CategoryEntity.getCategoryList();
+        List<Category> categoryList = CategoryEntity.getCategoryList();
         for (int i = 0; i < categoryList.size(); i++) {
             if (categoryList.get(i).getCategoryName().equals(categoryName)) {
                 categoryId = categoryList.get(i).getCategoryId();
@@ -757,7 +759,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date updateAt = creatAt;
         Integer distance = null;
-        Ticket updateTicket = new Ticket(ticketName, categoryId, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
+        Category category = new Category(categoryId, categoryName);
+        Ticket updateTicket = new Ticket(ticketName, category, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
         if (Ticket.getSelectedTicketId() == null) {
             // ERROR CANNOT EDITED BECAUSE NO TICKET IS SELECTED TO DELETE
             return;
