@@ -123,11 +123,56 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Button selectTicket_updateBtn;
 
-    @FXML
+     @FXML
     private Button bookingTicket_Btn;
 
     @FXML
-    private ComboBox<?> bookingTicket_airplaneID;
+    private Label bookingTicket_age;
+
+    @FXML
+    private TableColumn<?, ?> bookingTicket_categoryTable;
+
+    @FXML
+    private TableColumn<?, ?> bookingTicket_departmentTimeTable;
+
+    @FXML
+    private Label bookingTicket_email;
+
+    @FXML
+    private TableColumn<?, ?> bookingTicket_endingPlaceTable;
+
+    @FXML
+    private AnchorPane bookingTicket_form;
+
+    @FXML
+    private Button bookingTicket_payBtn;
+
+    @FXML
+    private Label bookingTicket_phoneNumber;
+
+    @FXML
+    private TableColumn<?, ?> bookingTicket_priceTable;
+
+    @FXML
+    private Button bookingTicket_receiptBtn;
+
+    @FXML
+    private Button bookingTicket_resetBtn;
+
+    @FXML
+    private Button bookingTicket_selectBtn;
+
+    @FXML
+    private TableColumn<?, ?> bookingTicket_startingPlaceTable;
+
+    @FXML
+    private TableView<?> bookingTicket_tableView;
+
+    @FXML
+    private TableColumn<?, ?> bookingTicket_ticketNameTable;
+
+    @FXML
+    private Label bookingTicket_toalBill;
 
     @FXML
     private DatePicker bookingTicket_userDate;
@@ -145,58 +190,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     private TextField bookingTicket_userPhoneNum;
 
     @FXML
-    private AnchorPane bookingTicket_form;
-
-    @FXML
-    private ComboBox<?> bookingTicket_location;
-
-    @FXML
-    private Button bookingTicket_payBtn;
-
-    @FXML
-    private Button bookingTicket_receiptBtn;
-
-    @FXML
-    private Button bookingTicket_resetBtn;
-
-    @FXML
-    private Button bookingTicket_selectBtn;
-
-    @FXML
-    private Label bookingTicket_selectedAirplaneID;
-
-    @FXML
-    private Label bookingTicket_selecteduserDate;
-
-    @FXML
-    private Label bookingTicket_selecteduserFirstName;
-
-    @FXML
-    private Label bookingTicket_selecteduserGender;
-
-    @FXML
-    private Label bookingTicket_selecteduserLastName;
-
-    @FXML
-    private Label bookingTicket_selecteduserPhoneNum;
-
-    @FXML
-    private Label bookingTicket_selectedLocation;
-
-    @FXML
-    private Label bookingTicket_selectedTicketNum;
-
-    @FXML
-    private Label bookingTicket_selectedType;
-
-    @FXML
-    private ComboBox<?> bookingTicket_ticketNum;
-
-    @FXML
-    private Label bookingTicket_toalBill;
-
-    @FXML
-    private ComboBox<?> bookingTicket_type;
+    private Label bookingTicket_username;
     
     @FXML
     private Label login_username;
