@@ -149,6 +149,8 @@ public class TicketEntity extends BaseEntity {
                 ticket.setDepartmentTime(resultSet.getDate("DepartmentTime"));
                 ticket.setCreatedAt(resultSet.getDate("CreatedAt"));
                 ticket.setUpdatedAt(resultSet.getDate("UpdatedAt"));
+                
+                ticketList.add(ticket);
             }
             
         } catch (SQLException ex) {

@@ -40,6 +40,7 @@ public class Ticket {
     }
 
     public Ticket() {
+        category = new Category();
     }
 
     //TicketName, CategoryId, Price, StartingPlace, EndingPlace, Distance, DepartmentTime ,CreatedAt, UpdatedAt
@@ -125,6 +126,9 @@ public class Ticket {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Ticket{" + "ticketId=" + ticketId + ", ticketName=" + ticketName + ", price=" + price + ", startingPlace=" + startingPlace + ", endingPlace=" + endingPlace + ", departmentTime=" + departmentTime + ", category=" + category + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    }
 }

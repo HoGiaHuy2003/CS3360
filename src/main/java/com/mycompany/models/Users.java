@@ -4,6 +4,7 @@
  */
 package com.mycompany.models;
 
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,8 +20,8 @@ public class Users {
     private String email;
     private String phoneNumber;
     private String password;
-    private Integer roleId;
-    private String roleName;
+    
+    private List<Roles> roleList;
     
     private static Integer loginUserId;
     
@@ -43,15 +44,6 @@ public class Users {
     }
 
     public Users() {
-    }
-
-    public Users(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public Users(Integer roleId, String roleName) {
-        this.roleId = roleId;
-        this.roleName = roleName;
     }
 
     public Users(String username, Integer age, String email, String phoneNumber, String password) {
@@ -119,20 +111,12 @@ public class Users {
         this.password = password;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public List<Roles> getRoleList() {
+        return roleList;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRoleList(List<Roles> roleList) {
+        this.roleList = roleList;
     }
     
     public static Boolean validateAge(Integer age) {

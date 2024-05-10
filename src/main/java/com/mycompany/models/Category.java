@@ -16,7 +16,7 @@ public class Category {
     
     private String categoryName;
     
-    List<Ticket> ticketList;
+    private List<Ticket> ticketList;
 
     public Integer getCategoryId() {
         return categoryId;
@@ -49,6 +49,11 @@ public class Category {
     public Category(Integer categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+    }
+
+    @Override
+    public String toString() {
+        return categoryName;
     }
     
 }

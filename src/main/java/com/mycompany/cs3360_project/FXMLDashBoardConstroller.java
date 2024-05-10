@@ -5,11 +5,14 @@
 package com.mycompany.cs3360_project;
 
 import com.mycompany.entities.CategoryEntity;
+import com.mycompany.entities.ReservationEntity;
 import com.mycompany.entities.RolesEntity;
 import com.mycompany.entities.TicketEntity;
 import com.mycompany.entities.UserRolesEntity;
 import com.mycompany.entities.UsersEntity;
 import com.mycompany.models.Category;
+import com.mycompany.models.Reservation;
+import com.mycompany.models.Roles;
 import com.mycompany.models.Ticket;
 import com.mycompany.models.Users;
 import java.io.IOException;
@@ -79,7 +82,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     private ComboBox selectTicket_category;
 
     @FXML
-    private TableColumn<Ticket, String> selectTicket_categoryTable;
+    private TableColumn<Ticket, Category> selectTicket_categoryTable;
 
     @FXML
     private Button selectTicket_deleteBtn;
@@ -130,16 +133,16 @@ public class FXMLDashBoardConstroller implements Initializable {
     private Label bookingTicket_age;
 
     @FXML
-    private TableColumn<?, ?> bookingTicket_categoryTable;
+    private TableColumn<Ticket, String> bookingTicket_categoryTable;
 
     @FXML
-    private TableColumn<?, ?> bookingTicket_departmentTimeTable;
+    private TableColumn<Ticket, String> bookingTicket_departmentTimeTable;
 
     @FXML
     private Label bookingTicket_email;
 
     @FXML
-    private TableColumn<?, ?> bookingTicket_endingPlaceTable;
+    private TableColumn<Ticket, String> bookingTicket_endingPlaceTable;
 
     @FXML
     private AnchorPane bookingTicket_form;
@@ -151,7 +154,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     private Label bookingTicket_phoneNumber;
 
     @FXML
-    private TableColumn<?, ?> bookingTicket_priceTable;
+    private TableColumn<Ticket, String> bookingTicket_priceTable;
 
     @FXML
     private Button bookingTicket_receiptBtn;
@@ -163,13 +166,13 @@ public class FXMLDashBoardConstroller implements Initializable {
     private Button bookingTicket_selectBtn;
 
     @FXML
-    private TableColumn<?, ?> bookingTicket_startingPlaceTable;
+    private TableColumn<Ticket, String> bookingTicket_startingPlaceTable;
 
     @FXML
-    private TableView<?> bookingTicket_tableView;
+    private TableView<Ticket> bookingTicket_tableView;
 
     @FXML
-    private TableColumn<?, ?> bookingTicket_ticketNameTable;
+    private TableColumn<Ticket, String> bookingTicket_ticketNameTable;
 
     @FXML
     private Label bookingTicket_toalBill;
@@ -191,6 +194,9 @@ public class FXMLDashBoardConstroller implements Initializable {
 
     @FXML
     private Label bookingTicket_username;
+    
+    @FXML
+    private Button selectTicket_deleteFromReservationBtn;
     
     @FXML
     private Label login_username;
@@ -301,6 +307,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         comboxCategory();
         
         setTicketForUpdatedForm();
+        
+        setUpReservationForm();
     }    
     
     @FXML
@@ -350,7 +358,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     }
     
     private void setValueForRolesListView() {
-        ObservableList<Users> roleList = RolesEntity.index();
+        ObservableList<Roles> roleList = RolesEntity.index();
         
         if (roleList == null) {
             return;
@@ -368,39 +376,62 @@ public class FXMLDashBoardConstroller implements Initializable {
     
     @FXML
     private void chooseUser() {
-        ObservableList<Users> userList = UsersEntity.index();
-        Integer sizeOfUserList = userList.size();
-        for (int i = 0; i < sizeOfUserList; i++) {
-            if (user_tableView.getSelectionModel().getSelectedItem().getUserId() == userList.get(i).getUserId()) {
-                Users.setSelectedUserId(userList.get(i).getUserId());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success!!!");
-                alert.setHeaderText("Selected User successfully!!!");
-                alert.setContentText("User are selected: " + userList.get(i).getUsername());
-                alert.showAndWait();
-                return;
+        if (user_tableView.getSelectionModel().getSelectedItem() != null) {
+            ObservableList<Users> userList = UsersEntity.index();
+            Integer sizeOfUserList = userList.size();
+            for (int i = 0; i < sizeOfUserList; i++) {
+                if (user_tableView.getSelectionModel().getSelectedItem().getUserId() == userList.get(i).getUserId()) {
+                    Users.setSelectedUserId(userList.get(i).getUserId());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success!!!");
+                    alert.setHeaderText("Selected User successfully!!!");
+                    alert.setContentText("User are selected: " + userList.get(i).getUsername());
+                    alert.showAndWait();
+                    setUpReservationForm();
+                    return;
+                }
             }
         }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Error!!!");
+        alert.setHeaderText("No user choosen!");
+        alert.setContentText("Please choose a user to authorize or support for booking ticket!!!");
+        alert.showAndWait();
     }
     
     @FXML 
     private void authorizedUser() {
         if (Users.getSelectedUserId() == null) {
             // Do Some Alert
-            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("No user choosen!");
+            alert.setContentText("Please choose a user to authorize!");
+            alert.showAndWait();
             return;
         }
+        
+        if (UserRolesEntity.findUserListByRoleName("Admin").size() == 1 && UserRolesEntity.isAuthorized(Users.getSelectedUserId(), "Admin")) {
+            // This user is the only one who has role: admin and cannot be authorized 
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Account is the only one which has role: Admin!!!");
+            alert.setContentText("Your account is the only one having role: Admin and cannot be authorized!!!");
+            alert.showAndWait();
+            return;
+        }
+        
         UserRolesEntity.deleteByUserId(Users.getSelectedUserId());
         
         if (role_list.getSelectionModel().getSelectedItems() != null) {
-            ObservableList<Users> roleList = RolesEntity.index();
+            ObservableList<Roles> roleList = RolesEntity.index();
             Integer sizeOfRoleList = roleList.size();
             Integer roleSelectedSize = role_list.getSelectionModel().getSelectedItems().size();
             for (int i = 0; i < sizeOfRoleList; i++) {
                 for (int j = 0; j < roleSelectedSize; j++) {
                     if (role_list.getSelectionModel().getSelectedItems().get(j).equalsIgnoreCase(roleList.get(i).getRoleName())) {
-                        roleList.get(i).setUserId(Users.getSelectedUserId());
-                        UserRolesEntity.insert(roleList.get(i));
+//                        roleList.get(i).setUserId(Users.getSelectedUserId());
+                        UserRolesEntity.insert(Users.getSelectedUserId(), roleList.get(i).getRoleId());
                     }    
                 }
             }
@@ -415,6 +446,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         if (Users.getSelectedUserId() == Users.getLoginUserId()) {
             getUserNameAndRole();
         }
+        
         authorization();
     }
     
@@ -422,7 +454,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     private void addRole() {
         String roleName = role_name.getText().toString();
         
-        Users newRole = new Users();
+        Roles newRole = new Roles();
         newRole.setRoleName(roleName);
         
         RolesEntity.insert(newRole);
@@ -439,7 +471,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private void deleteRole() {
         if (role_list.getSelectionModel().getSelectedItems() != null) {
-            ObservableList<Users> roleList = RolesEntity.index();
+            ObservableList<Roles> roleList = RolesEntity.index();
             System.out.println(role_list.getSelectionModel().getSelectedItems().get(0));
             Integer roleSelectedSize = role_list.getSelectionModel().getSelectedItems().size();
             Integer sizeOfRoleList = roleList.size();
@@ -460,7 +492,7 @@ public class FXMLDashBoardConstroller implements Initializable {
                         }
                         
                         Integer deletedRoleId = roleList.get(i).getRoleId();
-                        if (UserRolesEntity.findByRoleId(deletedRoleId) != null) {
+                        if (UserRolesEntity.findUserListByRoleId(deletedRoleId) != null) {
                             UserRolesEntity.deleteByRoleId(deletedRoleId); 
                         }
                         RolesEntity.delete(deletedRoleId);
@@ -526,7 +558,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         login_username.setText(users.getUsername());
         
-        List<Users> userRoleList = UserRolesEntity.findRoleByUserId(loginId);
+        List<Roles> userRoleList = UserRolesEntity.findRoleListByUserId(loginId);
         
         if (userRoleList.size() == 0) {
             return;
@@ -574,19 +606,42 @@ public class FXMLDashBoardConstroller implements Initializable {
         if (option.get() == null) {
             
         } else if (option.get() == ButtonType.OK) {
+            
+        if (UserRolesEntity.findUserListByRoleName("Admin").size() == 1 && UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {
+            // This user is the only one who has role: admin and cannot be deleted 
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Account is the only one which has role: Admin!!!");
+            alert.setContentText("Your account is the only one having role: Admin and cannot be authorized!!!");
+            alert.showAndWait();
+            return;
+            }
+            
             UserRolesEntity.deleteByUserId(Users.getLoginUserId());
             UsersEntity.delete(Users.getLoginUserId());
             Users.setLoginUserId(null);
             signOut();
         }
+        
     } 
     
     private void authorization() {
         dashBoard_Btn.setDisable(false);
+        roleAuthorize_btn.setDisable(false);
+        role_addBtn.setDisable(false);
+        role_deleteBtn.setDisable(false);
+        selectTicket_addBtn.setDisable(false);
         if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {
             dashBoard_Btn.setDisable(true);
+            roleAuthorize_btn.setDisable(true);
+            role_addBtn.setDisable(true);
+            role_deleteBtn.setDisable(true);
+            selectTicket_addBtn.setDisable(true);
         }
-    
+        users_Btn.setDisable(false);
+        if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin") && !UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Employee")) {
+            users_Btn.setDisable(true);
+        }
     }
     
     
@@ -620,8 +675,9 @@ public class FXMLDashBoardConstroller implements Initializable {
                 break;
             }
         }
+        
         selectTicket_ticketNameTable.setCellValueFactory(new PropertyValueFactory<>("ticketName"));
-        selectTicket_categoryTable.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
+        selectTicket_categoryTable.setCellValueFactory(new PropertyValueFactory<>("category"));
         selectTicket_priceTable.setCellValueFactory(new PropertyValueFactory<>("price"));
         selectTicket_startingPlaceTable.setCellValueFactory(new PropertyValueFactory<>("startingPlace"));
         selectTicket_endingPlaceBtn.setCellValueFactory(new PropertyValueFactory<>("endingPlace"));
@@ -631,6 +687,16 @@ public class FXMLDashBoardConstroller implements Initializable {
     }
     
     private void disableUpdateAndDelete() {
+        if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {
+            selectTicket_updateBtn.setDisable(true);
+            selectTicket_deleteBtn.setDisable(true);
+            selectTicket_resetBtn.setDisable(false);
+            if (Ticket.getSelectedTicketId() == null) {
+                selectTicket_resetBtn.setDisable(true);
+            }
+            return;
+        }
+        
         selectTicket_updateBtn.setDisable(false);
         selectTicket_deleteBtn.setDisable(false);
         selectTicket_resetBtn.setDisable(false);
@@ -786,5 +852,91 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML 
     private void deleteTicket() {
         
+    }
+    
+    @FXML
+    private void addToReservation() {
+        if (Ticket.getSelectedTicketId() != null) {
+            Integer UserId = Users.getLoginUserId();
+            if (Users.getSelectedUserId() != null) {
+                UserId = Users.getSelectedUserId();
+            } 
+            
+            ReservationEntity.insert(UserId, Ticket.getSelectedTicketId());
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success!!!");
+            alert.setHeaderText("Add ticket successfully!!!");
+            alert.setContentText("Ticket which you choosed is added to reservation!");
+            alert.showAndWait();
+            setUpReservationForm();
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Error!!!");
+        alert.setHeaderText("Error add ticket to reservation");
+        alert.setContentText("Please choose ticket you want to add to reservation!");
+        alert.showAndWait();
+    }
+    
+    private void setUpReservationForm() {
+        Integer UserId = Users.getLoginUserId();
+        if (Users.getSelectedUserId() != null) {
+            UserId = Users.getSelectedUserId();
+        }
+        
+        Reservation userReservation = ReservationEntity.ticketListOfUserId(UserId);
+        
+        if (userReservation == null) {
+            bookingTicket_Btn.setDisable(true);
+            bookingTicket_form.setVisible(false);
+            selectTicket_form.setVisible(true);
+            return;
+        }
+        bookingTicket_username.setText(userReservation.getUser().getUsername());
+        bookingTicket_age.setText(userReservation.getUser().getAge().toString());
+        bookingTicket_phoneNumber.setText(userReservation.getUser().getPhoneNumber());
+        bookingTicket_email.setText(userReservation.getUser().getEmail());
+
+        ObservableList<Ticket> ticketList = FXCollections.observableList(ReservationEntity.ticketListOfUserId(UserId).getTicketList());
+        bookingTicket_ticketNameTable.setCellValueFactory(new PropertyValueFactory<>("ticketName"));
+        bookingTicket_categoryTable.setCellValueFactory(new PropertyValueFactory<>("category"));
+        bookingTicket_priceTable.setCellValueFactory(new PropertyValueFactory<>("price"));
+        bookingTicket_startingPlaceTable.setCellValueFactory(new PropertyValueFactory<>("startingPlace"));
+        bookingTicket_endingPlaceTable.setCellValueFactory(new PropertyValueFactory<>("endingPlace"));
+        bookingTicket_departmentTimeTable.setCellValueFactory(new PropertyValueFactory<>("departmentTime"));
+
+        bookingTicket_tableView.setItems(ticketList); 
+        
+        bookingTicket_Btn.setDisable(false);
+    }
+    
+    @FXML
+    private void deleteFromReservation () {
+        if (bookingTicket_tableView.getSelectionModel().getSelectedItem() != null) {
+            Ticket.setSelectedTicketId(bookingTicket_tableView.getSelectionModel().getSelectedItem().getTicketId());
+            
+            Integer UserId = Users.getLoginUserId();
+            if (Users.getSelectedUserId() != null) {
+                UserId = Users.getSelectedUserId();
+            } 
+            
+            ReservationEntity.deleteTicketByUserId(UserId, Ticket.getSelectedTicketId());
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success!!!");
+            alert.setHeaderText("Delete ticket successfully!!!");
+            alert.setContentText("Ticket which you choosed is delete from reservation!");
+            alert.showAndWait();
+            Ticket.setSelectedTicketId(null);
+            setUpReservationForm();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Error!!!");
+        alert.setHeaderText("Error delete ticket from reservation");
+        alert.setContentText("Please choose ticket you want to delete from reservation!");
+        alert.showAndWait();
     }
 } 

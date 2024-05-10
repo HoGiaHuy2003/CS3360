@@ -4,7 +4,7 @@
  */
 package com.mycompany.entities;
 
-import com.mycompany.models.Users;
+import com.mycompany.models.Roles;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -19,7 +19,7 @@ import javafx.collections.ObservableList;
  * @author Admin
  */
 public class RolesEntity extends BaseEntity {
-    public static void insert(Users newRole) {
+    public static void insert(Roles newRole) {
         open();
 
         String sql = "INSERT INTO Roles (RoleName, NormalizedRoleName) VALUES (?, ?)";
@@ -38,7 +38,7 @@ public class RolesEntity extends BaseEntity {
         }
     }
 
-    public static void update(Users updatedRole) {
+    public static void update(Roles updatedRole) {
         open();
 
         String sql = "UPDATE Roles SET RoleName = ?, NormalizedRoleName = ? WHERE RoleId = ?";
@@ -76,8 +76,8 @@ public class RolesEntity extends BaseEntity {
         }
     }
 
-    public static ObservableList<Users> index() {
-        List<Users> roleList = new Vector<>();
+    public static ObservableList<Roles> index() {
+        List<Roles> roleList = new Vector<>();
 
         open();
 
@@ -88,7 +88,7 @@ public class RolesEntity extends BaseEntity {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Users role = new Users(resultSet.getInt("RoleId"), resultSet.getString("RoleName"));
+                Roles role = new Roles(resultSet.getInt("RoleId"), resultSet.getString("RoleName"));
                 roleList.add(role);
             }
         } catch (SQLException ex) {
@@ -97,13 +97,13 @@ public class RolesEntity extends BaseEntity {
             close();
         }
 
-        ObservableList<Users> dataList = FXCollections.observableList(roleList);
+        ObservableList<Roles> dataList = FXCollections.observableList(roleList);
 
         return dataList;
     }
     
-    public static Users findRoleByName(String RoleName) {
-        Users role = null;
+    public static Roles findRoleByName(String RoleName) {
+        Roles role = null;
 
         open();
 
@@ -116,7 +116,7 @@ public class RolesEntity extends BaseEntity {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                role = new Users(resultSet.getInt("RoleId"), resultSet.getString("RoleName"));
+                role = new Roles(resultSet.getInt("RoleId"), resultSet.getString("RoleName"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(RolesEntity.class.getName()).log(Level.SEVERE, null, ex);
