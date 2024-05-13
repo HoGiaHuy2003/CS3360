@@ -193,7 +193,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="selectTicket_form" layoutX="186.0" layoutY="79.0" prefHeight="544.0" prefWidth="900.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="selectTicket_form" layoutX="186.0" layoutY="79.0" prefHeight="544.0" prefWidth="900.8" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="7.0" layoutY="14.0" prefHeight="529.0" prefWidth="266.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
@@ -300,67 +300,21 @@
                            </children></AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="bookingTicket_form" layoutX="4.0" prefHeight="544.0" prefWidth="900.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="bookingTicket_form" layoutX="4.0" prefHeight="554.4" prefWidth="948.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="12.0" layoutY="8.0" prefHeight="127.0" prefWidth="788.0" styleClass="bg-white" stylesheets="@designDashboard.css" visible="false">
-                           <children>
-                              <AnchorPane layoutX="1.0" prefHeight="89.0" prefWidth="786.0" styleClass="infor-card" stylesheets="@designDashboard.css" visible="false">
-                                 <children>
-                                    <Label layoutX="14.0" layoutY="14.0" text="user Information" textFill="#fff6f6">
-                                       <font>
-                                          <Font name="Arial Bold" size="28.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="35.0" layoutY="70.0" text="First name:" textFill="WHITE">
-                                       <font>
-                                          <Font name="Tahoma" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="37.0" layoutY="114.0" text="Last name: " textFill="WHITE">
-                                       <font>
-                                          <Font name="Tahoma" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="bookingTicket_userFirstName" layoutX="123.0" layoutY="67.0" styleClass="io-textfield" stylesheets="@designDashboard.css" />
-                                    <TextField fx:id="bookingTicket_userLastName" layoutX="123.0" layoutY="111.0" styleClass="io-textfield" stylesheets="@designDashboard.css" />
-                                    <Label layoutX="315.0" layoutY="70.0" text="Phone #:" textFill="WHITE">
-                                       <font>
-                                          <Font name="Tahoma" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="bookingTicket_userPhoneNum" layoutX="387.0" layoutY="67.0" styleClass="io-textfield" stylesheets="@designDashboard.css" />
-                                    <Label layoutX="337.0" layoutY="114.0" text="Date:" textFill="WHITE">
-                                       <font>
-                                          <Font name="Tahoma" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="57.0" layoutY="157.0" text="Gender:" textFill="WHITE">
-                                       <font>
-                                          <Font name="Tahoma" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <ComboBox fx:id="bookingTicket_userGender" layoutX="123.0" layoutY="154.0" prefHeight="26.0" prefWidth="123.0" promptText="Choose" styleClass="io-textfield" stylesheets="@designDashboard.css" />
-                                    <DatePicker fx:id="bookingTicket_userDate" layoutX="388.0" layoutY="111.0" prefHeight="26.0" prefWidth="143.0" promptText="MM-DD-YYYY" styleClass="io-textfield" stylesheets="@designDashboard.css" />
-                                    <Button fx:id="bookingTicket_selectBtn" layoutX="456.0" layoutY="148.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="77.0" styleClass="select-btn" stylesheets="@designDashboard.css" text="Select" textFill="#6e76a9" />
-                                    <Button fx:id="bookingTicket_resetBtn" layoutX="364.0" layoutY="148.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="77.0" styleClass="io-reset-btn" stylesheets="@designDashboard.css" text="Reset" textFill="#a96da1" />
-                                 </children>
-                              </AnchorPane>
-                           </children>
-                        </AnchorPane>
                         <AnchorPane layoutX="5.0" layoutY="5.0" prefHeight="546.0" prefWidth="934.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
-                              <Label layoutX="485.0" layoutY="508.0" text="Total:">
+                              <Label layoutX="601.0" layoutY="508.0" text="Total:">
                                  <font>
                                     <Font name="Arial" size="21.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_toalBill" layoutX="556.0" layoutY="508.0" text="\$0.0">
+                              <Label fx:id="bookingTicket_toalBill" layoutX="672.0" layoutY="508.0" text="\$0.0">
                                  <font>
                                     <Font name="Arial" size="21.0" />
                                  </font>
                               </Label>
                               <Button fx:id="bookingTicket_payBtn" layoutX="737.0" layoutY="505.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="90.0" styleClass="select-btn" stylesheets="@designDashboard.css" text="Pay" textFill="#6e76a9" />
-                              <Button fx:id="bookingTicket_receiptBtn" layoutX="629.0" layoutY="506.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="94.0" styleClass="receipt-btn" stylesheets="@designDashboard.css" text="Receipt" textFill="#c5c76c" />
                               <Label layoutX="383.0" layoutY="122.0" prefHeight="26.0" prefWidth="114.0" text="Reservation" textFill="#262626">
                                  <font>
                                     <Font name="Tahoma Bold" size="18.0" />
@@ -399,7 +353,7 @@
                                     <Label fx:id="bookingTicket_age" layoutX="553.0" layoutY="27.0" prefHeight="32.0" prefWidth="182.0" styleClass="label-infor" stylesheets="@designDashboard.css" text="Label" />
                                  </children>
                               </AnchorPane>
-                              <TableView fx:id="bookingTicket_tableView" layoutX="16.0" layoutY="157.0" prefHeight="340.0" prefWidth="902.0">
+                              <TableView fx:id="bookingTicket_tableView" layoutX="16.0" layoutY="149.0" prefHeight="350.0" prefWidth="904.0">
                                 <columns>
                                   <TableColumn fx:id="bookingTicket_ticketNameTable" prefWidth="123.20001220703125" text="Ticket Name" />
                                   <TableColumn fx:id="bookingTicket_categoryTable" prefWidth="115.19998168945312" text="Category" />
@@ -410,6 +364,37 @@
                                 </columns>
                               </TableView>
                               <Button fx:id="selectTicket_deleteFromReservationBtn" layoutX="14.0" layoutY="500.0" mnemonicParsing="false" onAction="#deleteFromReservation" prefHeight="42.0" prefWidth="299.0" styleClass="delete-btn" stylesheets="@designDashboard.css" text="Delete Selected Ticket From Reservation" textFill="#d97d75" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="AnchorPane" prefHeight="554.0" prefWidth="933.0" visible="false">
+                           <children>
+                              <Label layoutX="373.0" layoutY="14.0" text="THANK YOU">
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                              </Label>
+                              <TableView layoutX="26.0" layoutY="63.0" prefHeight="390.0" prefWidth="871.0" stylesheets="@designBill.css">
+                                 <columns>
+                                    <TableColumn prefWidth="75.0" text="Ticket ID" />
+                                    <TableColumn prefWidth="93.59991455078125" text="Ticket Name" />
+                                    <TableColumn prefWidth="87.99993896484375" text="Category" />
+                                    <TableColumn prefWidth="74.40008544921875" text="Price" />
+                                    <TableColumn prefWidth="120.800048828125" text="Starting Place" />
+                                    <TableColumn prefWidth="209.60003662109375" text="Ending Place" />
+                                    <TableColumn prefWidth="207.20001220703125" text="Departure Time" />
+                                 </columns>
+                              </TableView>
+                              <Label layoutX="750.0" layoutY="464.0" text="Total Payment: ">
+                                 <font>
+                                    <Font name="Tahoma" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="864.0" layoutY="463.0" text="\$250">
+                                 <font>
+                                    <Font name="Tahoma" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="769.0" layoutY="493.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="134.0" styleClass="cancel-btn" stylesheets="@designBill.css" text="Cancel Order" />
                            </children>
                         </AnchorPane>
                      </children>
