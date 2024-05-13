@@ -20,7 +20,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="main_form" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.cs3360_project.FXMLDashBoardConstroller">
+<AnchorPane id="AnchorPane" fx:id="main_form" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.cs3360_project.FXMLDashBoardConstroller">
    <children>
       <BorderPane layoutX="255.0" layoutY="100.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -406,7 +406,7 @@
                                     <TableColumn fx:id="bookingTicket_priceTable" prefWidth="110.40005493164062" text="Price" />
                                     <TableColumn fx:id="bookingTicket_startingPlaceTable" prefWidth="185.5999755859375" text="Starting Place" />
                                     <TableColumn fx:id="bookingTicket_endingPlaceTable" prefWidth="167.20001220703125" text="Ending Place" />
-                                    <TableColumn fx:id="bookingTicket_departmentTimeTable" prefWidth="202.4000244140625" text="Department Time" />
+                                    <TableColumn fx:id="bookingTicket_departmentTimeTable" prefWidth="202.4000244140625" text="Departure Time" />
                                 </columns>
                               </TableView>
                               <Button fx:id="selectTicket_deleteFromReservationBtn" layoutX="14.0" layoutY="500.0" mnemonicParsing="false" onAction="#deleteFromReservation" prefHeight="42.0" prefWidth="299.0" styleClass="delete-btn" stylesheets="@designDashboard.css" text="Delete Selected Ticket From Reservation" textFill="#d97d75" />
