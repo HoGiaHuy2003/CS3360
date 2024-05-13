@@ -1,0 +1,38 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : May 12, 2024, 2:08:06 PM
+    Author     : Legion
+*/
+.cancel-btn {
+    -fx-background-color: #cc4343;
+    -fx-background-radius: 10px 5px 10px 5px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-text-fill:#fff;
+}
+.history-btn {
+    -fx-background-color: #446093;
+    -fx-background-radius: 10px 5px 10px 5px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-text-fill:#fff;
+
+}
+.table-view {
+    -fx-border-color:linear-gradient(from 0.0% 0.0% to 100.0% 100.0%, #cc4343 0.0%, #7e2e2e 100.0%);
+    -fx-padding: 0px;
+    -fx-border-radius: 8px;
+}
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(from 0.0% 0.0% to 100.0% 100.0%, #cc4343 0.0%, #7e2e2e 100.0%);
+    -fx-background-insets: 0 0 0 0;
+}
+.table-view .column-header, .filter {
+    -fx-background-color: transparent;
+    -fx-size: 50px;
+}
