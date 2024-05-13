@@ -372,6 +372,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         setUpReservationForm();
         
         setUpHistoryComboBox();
+        
+        setUpOrderOfUser();
     }    
     
     @FXML
@@ -1072,10 +1074,21 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
         
-        bill_history.setValue(0);
+        if (orderList.size() == 0) {
+            bill_Btn.setDisable(true);
+            
+            bill_form.setVisible(false);
+            
+            selectTicket_form.setVisible(true);
+            
+            return;
+        }
+        
         for (int i = 0; i < orderList.size(); i++) {
             bill_history.getItems().addAll(i+1);
         }
+        
+        bill_history.setValue(0);
     }
     
     @FXML
@@ -1086,6 +1099,10 @@ public class FXMLDashBoardConstroller implements Initializable {
         }
         
         ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+        
+        if (orderList.size() == 0) {
+            return;
+        }
        
         for (int i = 0; i < orderList.size(); i++) {
             if (bill_history.getSelectionModel().getSelectedItem() == i+1) {
@@ -1095,6 +1112,7 @@ public class FXMLDashBoardConstroller implements Initializable {
                 bill_orderDate.setText(orderList.get(i).getOrderDate().toString());
                 bill_status.setText(orderList.get(i).getStatus().toString());
                 bill_cancelDate.setText("No Cancel");
+                
                 if (orderList.get(i).getCancelDate() != null) {
                     bill_cancelDate.setText(orderList.get(i).getCancelDate().toString());
                 }
@@ -1111,6 +1129,48 @@ public class FXMLDashBoardConstroller implements Initializable {
                 bill_TableView.setItems(ticketList);
                 
                 return;
+            }
+        }
+    }
+    
+    @FXML
+    private void cancelOrder() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete this account: ");
+        alert.setHeaderText("Are you sure want to cancel your order?");
+
+        Optional<ButtonType> option = alert.showAndWait();
+        
+        if (option.get() == null) {
+            
+        } else if (option.get() == ButtonType.OK) {
+            Integer UserId = Users.getLoginUserId();
+            if (Users.getSelectedUserId() != null) {
+                UserId = Users.getSelectedUserId();
+            }
+            
+            ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+            
+            Order order = new Order();
+            
+            order.setCancelDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            
+            for (int i = 0; i < orderList.size(); i++) {
+                if (bill_history.getSelectionModel().getSelectedItem() == i+1) {
+                    order.setOrderId(orderList.get(i).getOrderId());
+                    
+                    Status status = new Status();
+                    
+                    status.setStatusId(orderList.get(i).getStatus().getStatusId() + 1);
+                    
+                    order.setStatus(status);
+                    
+                    OrderEntity.updateCancelDate(order);
+                    
+                    setUpOrderOfUser();
+                    
+                    return;
+                }
             }
         }
     }

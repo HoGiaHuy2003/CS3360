@@ -440,7 +440,7 @@
                               <Font name="Tahoma" size="15.0" />
                            </font>
                         </Label>
-                        <Button fx:id="bill_cancelBtn" layoutX="769.0" layoutY="499.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="134.0" styleClass="cancel-btn" stylesheets="@designBill.css" text="Cancel Order" />
+                        <Button fx:id="bill_cancelBtn" layoutX="769.0" layoutY="499.0" mnemonicParsing="false" onAction="#cancelOrder" prefHeight="46.0" prefWidth="134.0" styleClass="cancel-btn" stylesheets="@designBill.css" text="Cancel Order" />
                         <AnchorPane layoutX="6.0" layoutY="71.0" prefHeight="407.0" prefWidth="236.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
                               <Label layoutX="8.0" layoutY="252.0" text="Order Date:">

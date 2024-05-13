@@ -101,7 +101,7 @@ public class OrderEntity extends BaseEntity {
         List<Order> orderList = new Vector<>();
         
         try {
-            String sql = "SELECT Users.UserName, Users.Email, Users.PhoneNumber, Order_.OrderDate, Order_.CancelDate, Status.StatusId ,Status.StatusName, Ticket.TicketId ,Ticket.TicketName, Category.CategoryId ,Category.CategoryName, Ticket.StartingPlace, Ticket.EndingPlace, Ticket.DepartmentTime, OrderDetail.Price FROM OrderDetail INNER JOIN Order_ ON OrderDetail.OrderId = Order_.OrderId INNER JOIN Status ON Order_.StatusId = Status.StatusId INNER JOIN Ticket ON OrderDetail.OrderId = Ticket.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Order_.UserId = Users.UserId WHERE Users.UserId = ?;";
+            String sql = "SELECT Users.UserName, Users.Email, Users.PhoneNumber, Order_.OrderId, Order_.OrderDate, Order_.CancelDate, Status.StatusId ,Status.StatusName, Ticket.TicketId ,Ticket.TicketName, Category.CategoryId ,Category.CategoryName, Ticket.StartingPlace, Ticket.EndingPlace, Ticket.DepartmentTime, OrderDetail.Price FROM OrderDetail INNER JOIN Order_ ON OrderDetail.OrderId = Order_.OrderId INNER JOIN Status ON Order_.StatusId = Status.StatusId INNER JOIN Ticket ON OrderDetail.OrderId = Ticket.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Order_.UserId = Users.UserId WHERE Users.UserId = ? ORDER BY OrderId ASC;";
         
             statement = conn.prepareStatement(sql);
             
@@ -144,6 +144,8 @@ public class OrderEntity extends BaseEntity {
                 
                 Order order = new Order();
                 
+                order.setOrderId(resultSet.getInt("OrderId"));
+                
                 order.setUser(user);
                 order.setOrderDate(resultSet.getDate("OrderDate"));
                 order.setCancelDate(resultSet.getDate("CancelDate"));
@@ -163,6 +165,27 @@ public class OrderEntity extends BaseEntity {
 
         
         return dataList;
+    }
+    
+    public static void updateCancelDate(Order order) {
+        open();
+        
+        try {
+            String sql = "UPDATE Order_ SET CancelDate = ?, StatusId = ? WHERE OrderId = ?";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setDate(1, new Date(order.getCancelDate().getTime()));
+            statement.setInt(2, order.getStatus().getStatusId());
+            statement.setInt(3, order.getOrderId());
+            
+            statement.execute();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
     }
 }
 
