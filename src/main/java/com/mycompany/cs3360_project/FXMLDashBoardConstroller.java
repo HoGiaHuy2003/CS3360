@@ -288,6 +288,60 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Button signout_btn;
     
+    @FXML
+    private TableView<?> bill_TableView;
+
+    @FXML
+    private Button bill_cancelBtn;
+
+    @FXML
+    private Label bill_cancelDate;
+
+    @FXML
+    private TableColumn<?, ?> bill_categoryTable;
+
+    @FXML
+    private TableColumn<?, ?> bill_departureTable;
+
+    @FXML
+    private Label bill_email;
+
+    @FXML
+    private TableColumn<?, ?> bill_endingPlaceTable;
+
+    @FXML
+    private AnchorPane bill_form;
+
+    @FXML
+    private ComboBox<?> bill_history;
+
+    @FXML
+    private Label bill_orderDate;
+
+    @FXML
+    private Label bill_phoneNumber;
+
+    @FXML
+    private TableColumn<?, ?> bill_priceTable;
+
+    @FXML
+    private TableColumn<?, ?> bill_startingPlaceTable;
+
+    @FXML
+    private Label bill_status;
+
+    @FXML
+    private Label bill_thankYou;
+
+    @FXML
+    private TableColumn<?, ?> bill_ticketNameTable;
+
+    @FXML
+    private Label bill_totalPayment;
+
+    @FXML
+    private Label bill_username;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -909,6 +963,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         bookingTicket_tableView.setItems(ticketList); 
         
         bookingTicket_Btn.setDisable(false);
+        
+        bookingTicket_toalBill.setText(ReservationEntity.totalBill(UserId).toString());
     }
     
     @FXML

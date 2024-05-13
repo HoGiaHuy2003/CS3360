@@ -7,35 +7,35 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="553.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="553.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.cs3360_project.BillController">
    <children>
-      <Label layoutX="299.0" layoutY="12.0" text="THANK YOU">
+      <Label layoutX="359.0" layoutY="14.0" text="THANK YOU">
          <font>
             <Font name="Tahoma" size="25.0" />
          </font>
       </Label>
-      <TableView layoutX="26.0" layoutY="63.0" prefHeight="389.0" prefWidth="718.0" stylesheets="@designBill.css">
+      <TableView layoutX="26.0" layoutY="63.0" prefHeight="389.0" prefWidth="806.0" stylesheets="@designBill.css">
         <columns>
-          <TableColumn prefWidth="75.0" text="Ticket ID" />
-          <TableColumn prefWidth="93.59991455078125" text="Ticket Name" />
-            <TableColumn prefWidth="87.99993896484375" text="Category" />
-            <TableColumn prefWidth="74.40008544921875" text="Price" />
-            <TableColumn prefWidth="120.800048828125" text="Starting Place" />
-            <TableColumn prefWidth="136.0" text="Ending Place" />
-            <TableColumn prefWidth="128.79996337890623" text="Departure Time" />
+          <TableColumn prefWidth="112.0" text="Order Date" />
+          <TableColumn prefWidth="112.0" text="Ticket Name" />
+            <TableColumn prefWidth="107.0" text="Category" />
+            <TableColumn prefWidth="93.0" text="Price" />
+            <TableColumn prefWidth="106.0" text="Starting Place" />
+            <TableColumn prefWidth="125.0" text="Ending Place" />
+            <TableColumn prefWidth="149.0" text="Departure Time" />
         </columns>
       </TableView>
-      <Label layoutX="536.0" layoutY="460.0" text="Total Payment: ">
+      <Label layoutX="625.0" layoutY="461.0" text="Total Payment: ">
          <font>
             <Font name="Tahoma" size="15.0" />
          </font>
       </Label>
-      <Label layoutX="650.0" layoutY="459.0" text="\$250">
+      <Label layoutX="739.0" layoutY="460.0" text="\$250">
          <font>
             <Font name="Tahoma" size="15.0" />
          </font>
       </Label>
-      <Button layoutX="599.0" layoutY="490.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="134.0" styleClass="cancel-btn" stylesheets="@designBill.css" text="Cancel Order" />
-      <Button layoutX="437.0" layoutY="491.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="141.0" styleClass="history-btn" stylesheets="@designBill.css" text="Transaction history" />
+      <Button layoutX="698.0" layoutY="491.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="134.0" styleClass="cancel-btn" stylesheets="@designBill.css" text="Cancel Order" />
+      <Button layoutX="526.0" layoutY="491.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="141.0" styleClass="history-btn" stylesheets="@designBill.css" text="Transaction history" />
    </children>
 </AnchorPane>
