@@ -55,6 +55,24 @@ public class ReservationEntity extends BaseEntity {
         }
     }
     
+    public static void clearReservation (Integer UserId) {
+        open();
+        
+        try {
+            String sql = "DELETE FROM Reservation WHERE UserId = ?";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setInt(1, UserId);
+            
+            statement.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservationEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+    }
+    
     public static Reservation ticketListOfUserId (Integer UserId) {
         Reservation reservation = null;
         

@@ -5,14 +5,18 @@
 package com.mycompany.cs3360_project;
 
 import com.mycompany.entities.CategoryEntity;
+import com.mycompany.entities.OrderEntity;
 import com.mycompany.entities.ReservationEntity;
 import com.mycompany.entities.RolesEntity;
+import com.mycompany.entities.StatusEntity;
 import com.mycompany.entities.TicketEntity;
 import com.mycompany.entities.UserRolesEntity;
 import com.mycompany.entities.UsersEntity;
 import com.mycompany.models.Category;
+import com.mycompany.models.Order;
 import com.mycompany.models.Reservation;
 import com.mycompany.models.Roles;
+import com.mycompany.models.Status;
 import com.mycompany.models.Ticket;
 import com.mycompany.models.Users;
 import java.io.IOException;
@@ -26,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Vector;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -60,6 +65,8 @@ public class FXMLDashBoardConstroller implements Initializable {
     /**
      * Initializes the controller class.
      */
+    @FXML
+    private Button bill_Btn;
     @FXML
     private Button selectTicket_Btn;
 
@@ -289,7 +296,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     private Button signout_btn;
     
     @FXML
-    private TableView<?> bill_TableView;
+    private TableView<Ticket> bill_TableView;
 
     @FXML
     private Button bill_cancelBtn;
@@ -298,22 +305,22 @@ public class FXMLDashBoardConstroller implements Initializable {
     private Label bill_cancelDate;
 
     @FXML
-    private TableColumn<?, ?> bill_categoryTable;
+    private TableColumn<Ticket, String> bill_categoryTable;
 
     @FXML
-    private TableColumn<?, ?> bill_departureTable;
+    private TableColumn<Ticket, String> bill_departureTable;
 
     @FXML
     private Label bill_email;
 
     @FXML
-    private TableColumn<?, ?> bill_endingPlaceTable;
+    private TableColumn<Ticket, String> bill_endingPlaceTable;
 
     @FXML
     private AnchorPane bill_form;
 
     @FXML
-    private ComboBox<?> bill_history;
+    private ComboBox<Integer> bill_history;
 
     @FXML
     private Label bill_orderDate;
@@ -322,10 +329,10 @@ public class FXMLDashBoardConstroller implements Initializable {
     private Label bill_phoneNumber;
 
     @FXML
-    private TableColumn<?, ?> bill_priceTable;
+    private TableColumn<Ticket, Float> bill_priceTable;
 
     @FXML
-    private TableColumn<?, ?> bill_startingPlaceTable;
+    private TableColumn<Ticket, String> bill_startingPlaceTable;
 
     @FXML
     private Label bill_status;
@@ -334,7 +341,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     private Label bill_thankYou;
 
     @FXML
-    private TableColumn<?, ?> bill_ticketNameTable;
+    private TableColumn<Ticket, String> bill_ticketNameTable;
 
     @FXML
     private Label bill_totalPayment;
@@ -363,6 +370,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         setTicketForUpdatedForm();
         
         setUpReservationForm();
+        
+        setUpHistoryComboBox();
     }    
     
     @FXML
@@ -383,21 +392,31 @@ public class FXMLDashBoardConstroller implements Initializable {
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(false);
+            bill_form.setVisible(false);
         } else if(event.getSource() == selectTicket_Btn) {
             dashBoard_form.setVisible(false);
             selectTicket_form.setVisible(true);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(false);
+            bill_form.setVisible(false);
         } else if(event.getSource() == bookingTicket_Btn) {
             dashBoard_form.setVisible(false);
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(true);
             users_form.setVisible(false);
+            bill_form.setVisible(false);
         } else if(event.getSource() == users_Btn) {
             dashBoard_form.setVisible(false);
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(true);
+            bill_form.setVisible(false);
+        } else if(event.getSource() == bill_Btn) {
+            dashBoard_form.setVisible(false);
+            selectTicket_form.setVisible(false);
+            bookingTicket_form.setVisible(false);
+            users_form.setVisible(false);
+            bill_form.setVisible(true);
         }
     }
     
@@ -989,10 +1008,110 @@ public class FXMLDashBoardConstroller implements Initializable {
             return;
         }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error!!!");
         alert.setHeaderText("Error delete ticket from reservation");
         alert.setContentText("Please choose ticket you want to delete from reservation!");
         alert.showAndWait();
+    }
+    
+    @FXML
+    private void order() {
+        Integer UserId = Users.getLoginUserId();
+        if (Users.getSelectedUserId() != null) {
+            UserId = Users.getSelectedUserId();
+        }
+        
+        Users orderUser = UsersEntity.details(UserId);
+        
+        Order order = new Order();
+        
+        order.setUser(orderUser);
+        
+        List<Status> statusList = StatusEntity.getStatusList();
+        
+        order.setStatus(statusList.get(0));
+        
+        order.setOrderDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        
+        OrderEntity.insert(order);
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!!!");
+        alert.setHeaderText("Order Successfully!!!");
+        alert.setContentText("Your order is successfully!");
+        alert.showAndWait();
+        
+        List<Order> orderList = OrderEntity.findOrderListByUser(UserId);
+        
+        Integer size = orderList.size() - 1;
+        
+        order.setOrderId(orderList.get(size).getOrderId());
+        
+        bill_form.setVisible(true);
+        
+        bookingTicket_form.setVisible(false);
+        
+        Reservation getTicketListFromReservation = ReservationEntity.ticketListOfUserId(UserId);
+        
+        for (int i = 0; i < getTicketListFromReservation.getTicketList().size(); i++) {
+            OrderEntity.insert(order.getOrderId(), getTicketListFromReservation.getTicketList().get(i).getTicketId(), getTicketListFromReservation.getTicketList().get(i).getPrice());
+        }
+        
+        ReservationEntity.clearReservation(UserId);
+        
+        setUpOrderOfUser();
+        
+    }
+    
+    private void setUpHistoryComboBox() {
+        Integer UserId = Users.getLoginUserId();
+        if (Users.getSelectedUserId() != null) {
+            UserId = Users.getSelectedUserId();
+        }
+        
+        ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+        
+        bill_history.setValue(0);
+        for (int i = 0; i < orderList.size(); i++) {
+            bill_history.getItems().addAll(i+1);
+        }
+    }
+    
+    @FXML
+    private void setUpOrderOfUser() {
+        Integer UserId = Users.getLoginUserId();
+        if (Users.getSelectedUserId() != null) {
+            UserId = Users.getSelectedUserId();
+        }
+        
+        ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+       
+        for (int i = 0; i < orderList.size(); i++) {
+            if (bill_history.getSelectionModel().getSelectedItem() == i+1) {
+                bill_username.setText(orderList.get(i).getUser().getUsername());
+                bill_email.setText(orderList.get(i).getUser().getEmail());
+                bill_phoneNumber.setText(orderList.get(i).getUser().getPhoneNumber());
+                bill_orderDate.setText(orderList.get(i).getOrderDate().toString());
+                bill_status.setText(orderList.get(i).getStatus().toString());
+                bill_cancelDate.setText("No Cancel");
+                if (orderList.get(i).getCancelDate() != null) {
+                    bill_cancelDate.setText(orderList.get(i).getCancelDate().toString());
+                }
+                
+                bill_ticketNameTable.setCellValueFactory(new PropertyValueFactory<>("ticketName"));
+                bill_categoryTable.setCellValueFactory(new PropertyValueFactory<>("category"));
+                bill_priceTable.setCellValueFactory(new PropertyValueFactory<>("price"));
+                bill_startingPlaceTable.setCellValueFactory(new PropertyValueFactory<>("startingPlace"));
+                bill_endingPlaceTable.setCellValueFactory(new PropertyValueFactory<>("endingPlace"));
+                bill_departureTable.setCellValueFactory(new PropertyValueFactory<>("departmentTime"));
+                
+                ObservableList<Ticket> ticketList = FXCollections.observableList(orderList.get(i).getTicketList());
+                
+                bill_TableView.setItems(ticketList);
+                
+                return;
+            }
+        }
     }
 } 
