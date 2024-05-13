@@ -909,6 +909,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         bookingTicket_tableView.setItems(ticketList); 
         
         bookingTicket_Btn.setDisable(false);
+        
+        bookingTicket_toalBill.setText(ReservationEntity.totalBill(UserId).toString());
     }
     
     @FXML

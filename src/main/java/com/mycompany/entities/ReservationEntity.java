@@ -104,5 +104,28 @@ public class ReservationEntity extends BaseEntity {
         return reservation;
     }
     
-    
+    public static Float totalBill(Integer UserId) {
+        open();
+        
+        try {
+            String sql = "SELECT SUM(Price) 'Total Price' FROM Ticket INNER JOIN Reservation ON Ticket.TicketId = Reservation.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Reservation.UserId = Users.UserId WHERE Users.UserId = ?;";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setInt(1, UserId);
+            
+            ResultSet resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                return resultSet.getFloat("Total Price");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservationEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally  {
+            close();
+        }
+        
+        return null;
+    }
 }
