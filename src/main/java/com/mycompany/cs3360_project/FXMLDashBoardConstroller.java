@@ -1088,7 +1088,7 @@ public class FXMLDashBoardConstroller implements Initializable {
             bill_history.getItems().addAll(i+1);
         }
         
-        bill_history.setValue(0);
+        bill_history.getSelectionModel().selectFirst();
     }
     
     @FXML
