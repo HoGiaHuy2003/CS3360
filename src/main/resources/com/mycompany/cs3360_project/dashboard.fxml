@@ -20,7 +20,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="main_form" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.cs3360_project.FXMLDashBoardConstroller">
+<AnchorPane id="AnchorPane" fx:id="main_form" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.cs3360_project.FXMLDashBoardConstroller">
    <children>
       <BorderPane layoutX="255.0" layoutY="100.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -111,7 +111,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="USERS" />
                      </graphic>
                   </Button>
-                  <Button fx:id="bookingTicket_Btn1" alignment="CENTER" layoutX="14.0" layoutY="331.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="172.0" styleClass="nav-btn" stylesheets="@designDashboard.css" text="Your Order">
+                  <Button fx:id="bill_Btn" alignment="CENTER" layoutX="14.0" layoutY="331.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="172.0" styleClass="nav-btn" stylesheets="@designDashboard.css" text="Your Order">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="BOOK" />
                      </graphic>
@@ -309,7 +309,7 @@
                   <AnchorPane fx:id="bookingTicket_form" layoutX="4.0" prefHeight="544.0" prefWidth="900.8" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0">
 
                      <children>
-                        <AnchorPane layoutX="5.0" layoutY="5.0" prefHeight="546.0" prefWidth="934.0" styleClass="bg-white" stylesheets="@designDashboard.css" visible="false">
+                        <AnchorPane layoutX="5.0" layoutY="5.0" prefHeight="546.0" prefWidth="934.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
                               <Label layoutX="601.0" layoutY="508.0" text="Total:">
                                  <font>
@@ -321,7 +321,7 @@
                                     <Font name="Arial" size="21.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="bookingTicket_payBtn" layoutX="737.0" layoutY="505.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="90.0" styleClass="select-btn" stylesheets="@designDashboard.css" text="Order" textFill="#6e76a9" />
+                              <Button fx:id="bookingTicket_payBtn" layoutX="737.0" layoutY="505.0" mnemonicParsing="false" onAction="#order" prefHeight="32.0" prefWidth="90.0" styleClass="select-btn" stylesheets="@designDashboard.css" text="Order" textFill="#6e76a9" />
                               <Label layoutX="383.0" layoutY="122.0" prefHeight="26.0" prefWidth="114.0" text="Reservation" textFill="#262626">
                                  <font>
                                     <Font name="Tahoma Bold" size="18.0" />
@@ -440,7 +440,7 @@
                               <Font name="Tahoma" size="15.0" />
                            </font>
                         </Label>
-                        <Button fx:id="bill_cancelBtn" layoutX="769.0" layoutY="499.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="134.0" styleClass="cancel-btn" stylesheets="@designBill.css" text="Cancel Order" />
+                        <Button fx:id="bill_cancelBtn" layoutX="769.0" layoutY="499.0" mnemonicParsing="false" onAction="#cancelOrder" prefHeight="46.0" prefWidth="134.0" styleClass="cancel-btn" stylesheets="@designBill.css" text="Cancel Order" />
                         <AnchorPane layoutX="6.0" layoutY="71.0" prefHeight="407.0" prefWidth="236.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
                               <Label layoutX="8.0" layoutY="252.0" text="Order Date:">
@@ -515,7 +515,7 @@
                               <Font name="Tahoma" size="16.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="bill_history" layoutX="346.0" layoutY="39.0" prefHeight="26.0" prefWidth="70.0" />
+                        <ComboBox fx:id="bill_history" layoutX="346.0" layoutY="39.0" onAction="#setUpOrderOfUser" prefHeight="26.0" prefWidth="70.0" />
                      </children>
                   </AnchorPane>
                </children>
