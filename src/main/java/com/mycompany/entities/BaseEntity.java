@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author Admin
- */
+ */ 
 public class BaseEntity {
     
     private static final String DATABASE = "CS3360"; 

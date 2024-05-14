@@ -772,6 +772,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
         Integer categoryId = null;
         List<Category> categoryList = CategoryEntity.getCategoryList();
+        // Find category ID
         for (int i = 0; i < categoryList.size(); i++) {
             if (categoryList.get(i).getCategoryName().equals(categoryName)) {
                 categoryId = categoryList.get(i).getCategoryId();
@@ -784,11 +785,13 @@ public class FXMLDashBoardConstroller implements Initializable {
 //        else {
 //            categoryId = 2;
 //        }
+        //get DepartureDate
         LocalDate selectedDate = selectTicket_Date.getValue();
         Date departmentDate = java.sql.Date.valueOf(selectedDate);
+        //Get creat and update Time
         Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date updateAt = creatAt;
-        Integer distance = null;
+        //Integer distance = null;
         Category category = new Category(categoryId, categoryName);
         Ticket newTicket = new Ticket(ticketName, category, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
         // Attempt to insert the new ticket into the database
@@ -796,6 +799,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         System.out.println("Ticket inserted successfully!");
         setValueForTicketTableView();
         
+        // Announce to add successfully
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success!!!");
         alert.setHeaderText("Ticket is added successfully!!!");
@@ -805,7 +809,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     
     @FXML
     private void selectTicket() {
-        ObservableList<Ticket> ticketList = TicketEntity.index();
+        ObservableList<Ticket> ticketList = TicketEntity.index();// getTicketEntityList
         Integer sizeOfTicketList = ticketList.size();
         for (int i = 0; i < sizeOfTicketList; i++) {
             if (selectTicket_tableView.getSelectionModel().getSelectedItem().getTicketId() == ticketList.get(i).getTicketId()) {

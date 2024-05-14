@@ -75,7 +75,7 @@ public class RolesEntity extends BaseEntity {
             close();
         }
     }
-
+// getRoleList
     public static ObservableList<Roles> index() {
         List<Roles> roleList = new Vector<>();
 
