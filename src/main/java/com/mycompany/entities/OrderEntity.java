@@ -100,6 +100,8 @@ public class OrderEntity extends BaseEntity {
         
         List<Order> orderList = new Vector<>();
         
+        Order order = null;
+        
         try {
             String sql = "SELECT Users.UserName, Users.Email, Users.PhoneNumber, Order_.OrderId, Order_.OrderDate, Order_.CancelDate, Status.StatusId ,Status.StatusName, Ticket.TicketId ,Ticket.TicketName, Category.CategoryId ,Category.CategoryName, Ticket.StartingPlace, Ticket.EndingPlace, Ticket.DepartmentTime, OrderDetail.Price FROM OrderDetail INNER JOIN Order_ ON OrderDetail.OrderId = Order_.OrderId INNER JOIN Status ON Order_.StatusId = Status.StatusId INNER JOIN Ticket ON OrderDetail.OrderId = Ticket.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Order_.UserId = Users.UserId WHERE Users.UserId = ? ORDER BY OrderId ASC;";
         
@@ -141,11 +143,11 @@ public class OrderEntity extends BaseEntity {
                 ticket.setDepartmentTime(resultSet.getDate("DepartmentTime"));
 //                ticket.setCreatedAt(resultSet.getDate("CreatedAt"));
 //                ticket.setUpdatedAt(resultSet.getDate("UpdatedAt"));
-                
-                Order order = new Order();
-                
-                order.setOrderId(resultSet.getInt("OrderId"));
-                
+
+                if (order == null || order.getOrderId() != resultSet.getInt("OrderId")) {
+                    order = new Order();
+                }
+
                 order.setUser(user);
                 order.setOrderDate(resultSet.getDate("OrderDate"));
                 order.setCancelDate(resultSet.getDate("CancelDate"));
@@ -153,6 +155,12 @@ public class OrderEntity extends BaseEntity {
                 order.setStatus(status);
                 
                 order.getTicketList().add(ticket);
+                
+                if (order.getOrderId() != null && order.getOrderId() == resultSet.getInt("OrderId")) {
+                    continue;
+                }
+                
+                order.setOrderId(resultSet.getInt("OrderId"));
                 
                 orderList.add(order);
             }

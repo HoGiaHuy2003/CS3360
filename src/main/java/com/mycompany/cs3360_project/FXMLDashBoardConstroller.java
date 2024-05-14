@@ -1064,6 +1064,9 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         setUpOrderOfUser();
         
+        setUpReservationForm();
+        
+        setUpOrderOfUser();
     }
     
     private void setUpHistoryComboBox() {
@@ -1128,7 +1131,7 @@ public class FXMLDashBoardConstroller implements Initializable {
                 
                 bill_TableView.setItems(ticketList);
                 
-                return;
+//                return;
             }
         }
     }
