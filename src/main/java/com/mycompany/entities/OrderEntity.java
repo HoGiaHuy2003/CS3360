@@ -103,7 +103,7 @@ public class OrderEntity extends BaseEntity {
         Order order = null;
         
         try {
-            String sql = "SELECT Users.UserName, Users.Email, Users.PhoneNumber, Order_.OrderId, Order_.OrderDate, Order_.CancelDate, Status.StatusId ,Status.StatusName, Ticket.TicketId ,Ticket.TicketName, Category.CategoryId ,Category.CategoryName, Ticket.StartingPlace, Ticket.EndingPlace, Ticket.DepartmentTime, OrderDetail.Price FROM OrderDetail INNER JOIN Order_ ON OrderDetail.OrderId = Order_.OrderId INNER JOIN Status ON Order_.StatusId = Status.StatusId INNER JOIN Ticket ON OrderDetail.OrderId = Ticket.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Order_.UserId = Users.UserId WHERE Users.UserId = ? ORDER BY OrderId ASC;";
+            String sql = "SELECT Users.UserName, Users.Email, Users.PhoneNumber, Order_.OrderId, Order_.OrderDate, Order_.CancelDate, Status.StatusId, Status.StatusName, Ticket.TicketId, Ticket.TicketName, Category.CategoryId, Category.CategoryName, Ticket.StartingPlace, Ticket.EndingPlace, Ticket.DepartmentTime, OrderDetail.Price FROM Users INNER JOIN OrderDetail INNER JOIN Order_ ON OrderDetail.OrderId = Order_.OrderId INNER JOIN Status ON Order_.StatusId = Status.StatusId INNER JOIN Ticket ON OrderDetail.TicketId = Ticket.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId ON Users.UserId = Order_.UserId WHERE Users.UserId = ? ORDER BY OrderId ASC;";
         
             statement = conn.prepareStatement(sql);
             
@@ -186,6 +186,44 @@ public class OrderEntity extends BaseEntity {
             statement.setDate(1, new Date(order.getCancelDate().getTime()));
             statement.setInt(2, order.getStatus().getStatusId());
             statement.setInt(3, order.getOrderId());
+            
+            statement.execute();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+    }
+    
+    public static void deleteOrderByUserId(Integer UserId) {
+        open();
+        
+        try {
+            String sql = "DELETE FROM Order_ WHERE UserId = ?";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setInt(1, UserId);
+            
+            statement.execute();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+    }
+    
+    public static void deleteFromOrderDetail(Integer OrderId) {
+        open();
+        
+        try {
+            String sql = "DELETE FROM OrderDetail WHERE OrderId = ?";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setInt(1, OrderId);
             
             statement.execute();
             
