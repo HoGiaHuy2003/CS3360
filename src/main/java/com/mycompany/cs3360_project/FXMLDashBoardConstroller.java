@@ -762,16 +762,16 @@ public class FXMLDashBoardConstroller implements Initializable {
     }
     
     private void disableUpdateAndDelete() {
-        if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {
-            selectTicket_updateBtn.setDisable(true);
-            selectTicket_deleteBtn.setDisable(true);
-            selectTicket_resetBtn.setDisable(false);
-            if (Ticket.getSelectedTicketId() == null) {
-                selectTicket_resetBtn.setDisable(true);
+        if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {//UserRole is not Admin you cannot delete or update Ticket
+            selectTicket_updateBtn.setDisable(true); // update is disabled
+            selectTicket_deleteBtn.setDisable(true); // delete is disabled
+            selectTicket_resetBtn.setDisable(false); // reset is unabled
+            if (Ticket.getSelectedTicketId() == null) { // If you haven't selected ticket you cannot using resetBtn
+                selectTicket_resetBtn.setDisable(true); // reset is disable
             }
             return;
         }
-        
+        // else if you is admin you can delete and update Ticket
         selectTicket_updateBtn.setDisable(false);
         selectTicket_deleteBtn.setDisable(false);
         selectTicket_resetBtn.setDisable(false);
@@ -834,7 +834,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         Integer sizeOfTicketList = ticketList.size();
         for (int i = 0; i < sizeOfTicketList; i++) {
             if (selectTicket_tableView.getSelectionModel().getSelectedItem().getTicketId() == ticketList.get(i).getTicketId()) {
-                Ticket.setSelectedTicketId(ticketList.get(i).getTicketId());
+                Ticket.setSelectedTicketId(ticketList.get(i).getTicketId());//Only when selectTicket I have selectedTicketId selectedTicketId equal TicketId
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success!!!");
                 alert.setHeaderText("Selected ticket successfully!!!");
@@ -845,9 +845,9 @@ public class FXMLDashBoardConstroller implements Initializable {
         }
         
         System.out.println(Ticket.getSelectedTicketId());
-        setTicketForUpdatedForm();
+        setTicketForUpdatedForm(); // then in the form you set value for textLabel for update
         
-        disableUpdateAndDelete();
+        disableUpdateAndDelete();// disableUpdateAnd Del
     }
     
     private void setTicketForUpdatedForm() {
