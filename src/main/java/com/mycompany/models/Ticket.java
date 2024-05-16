@@ -134,9 +134,9 @@ public class Ticket {
         return "Ticket{" + "ticketId=" + ticketId + ", ticketName=" + ticketName + ", price=" + price + ", startingPlace=" + startingPlace + ", endingPlace=" + endingPlace + ", departmentTime=" + departmentTime + ", category=" + category + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
     }
     
-    public static Boolean validatePrice(String price) {
+    public static Boolean validatePrice(Float price) {
         Pattern pattern = Pattern.compile("[+]?([0-9]*[.])?[0-9]+");
-        Matcher matcher = pattern.matcher(price);
+        Matcher matcher = pattern.matcher(price.toString());
         if (matcher.find() && matcher.group().equals(price)) {
             return true;
         }

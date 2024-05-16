@@ -67,6 +67,7 @@ public class FXMLDashBoardConstroller implements Initializable {
      */
     @FXML
     private Button bill_Btn;
+    
     @FXML
     private Button selectTicket_Btn;
 
@@ -133,7 +134,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Button selectTicket_updateBtn;
 
-     @FXML
+    @FXML
     private Button bookingTicket_Btn;
 
     @FXML
@@ -845,10 +846,19 @@ public class FXMLDashBoardConstroller implements Initializable {
         String endingPlace = selectTicket_endingPlace.getText();
         Float price = null;
         
-        if (Ticket.validatePrice(selectTicket_price.getText().toString())) {
-            price = Float.valueOf(selectTicket_price.getText());
-        } 
-        else {
+        try {
+            if (Ticket.validatePrice(Float.parseFloat(selectTicket_price.getText()))) {
+                price = Float.valueOf(selectTicket_price.getText());
+            } 
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!!!");
+                alert.setHeaderText("Add Ticket Failure!!!");
+                alert.setContentText("Price must be a positive floating point number, please try again!!!");
+                alert.showAndWait();
+                return;
+            }
+        } catch (NumberFormatException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!!!");
             alert.setHeaderText("Add Ticket Failure!!!");
