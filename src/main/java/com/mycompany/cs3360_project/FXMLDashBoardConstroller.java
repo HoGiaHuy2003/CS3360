@@ -682,22 +682,34 @@ public class FXMLDashBoardConstroller implements Initializable {
             
         } else if (option.get() == ButtonType.OK) {
             
-        if (UserRolesEntity.findUserListByRoleName("Admin").size() == 1 && UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {
-            // This user is the only one who has role: admin and cannot be deleted 
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Error!!!");
-            alert.setHeaderText("Account is the only one which has role: Admin!!!");
-            alert.setContentText("Your account is the only one having role: Admin and cannot be authorized!!!");
-            alert.showAndWait();
-            return;
+            if (UserRolesEntity.findUserListByRoleName("Admin").size() == 1 && UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {
+                // This user is the only one who has role: admin and cannot be deleted 
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error!!!");
+                alert.setHeaderText("Account is the only one which has role: Admin!!!");
+                alert.setContentText("Your account is the only one having role: Admin and cannot be authorized!!!");
+                alert.showAndWait();
+                return;
             }
             
             UserRolesEntity.deleteByUserId(Users.getLoginUserId());
-            UsersEntity.delete(Users.getLoginUserId());
-            Users.setLoginUserId(null);
-            signOut();
-        }
         
+            ObservableList<Order> orderListOfUserDeleted = OrderEntity.printOrderListOfUser(Users.getLoginUserId());
+
+            if (orderListOfUserDeleted.size() != 0) {
+                for (int i = 0; i < orderListOfUserDeleted.size(); i++) {
+                    OrderEntity.deleteFromOrderDetail(orderListOfUserDeleted.get(i).getOrderId());
+                }
+            }
+            
+            OrderEntity.deleteOrderByUserId(Users.getLoginUserId());
+            
+            UsersEntity.delete(Users.getLoginUserId());
+            
+            Users.setLoginUserId(null);
+            
+            signOut();
+        } 
     } 
     
     private void authorization() {
@@ -972,6 +984,7 @@ public class FXMLDashBoardConstroller implements Initializable {
             selectTicket_form.setVisible(true);
             return;
         }
+        
         bookingTicket_username.setText(userReservation.getUser().getUsername());
         bookingTicket_age.setText(userReservation.getUser().getAge().toString());
         bookingTicket_phoneNumber.setText(userReservation.getUser().getPhoneNumber());
@@ -990,6 +1003,26 @@ public class FXMLDashBoardConstroller implements Initializable {
         bookingTicket_Btn.setDisable(false);
         
         bookingTicket_toalBill.setText(ReservationEntity.totalBill(UserId).toString());
+    }
+    
+    private void clearReservationForm() {
+        bookingTicket_username.setText(null);
+        bookingTicket_age.setText(null);
+        bookingTicket_phoneNumber.setText(null);
+        bookingTicket_email.setText(null);
+
+//        bookingTicket_ticketNameTable.setCellValueFactory(new PropertyValueFactory<>("ticketName"));
+//        bookingTicket_categoryTable.setCellValueFactory(new PropertyValueFactory<>("category"));
+//        bookingTicket_priceTable.setCellValueFactory(new PropertyValueFactory<>("price"));
+//        bookingTicket_startingPlaceTable.setCellValueFactory(new PropertyValueFactory<>("startingPlace"));
+//        bookingTicket_endingPlaceTable.setCellValueFactory(new PropertyValueFactory<>("endingPlace"));
+//        bookingTicket_departmentTimeTable.setCellValueFactory(new PropertyValueFactory<>("departmentTime"));
+
+        bookingTicket_tableView.setItems(null); 
+        
+        bookingTicket_Btn.setDisable(true);
+        
+        bookingTicket_toalBill.setText(null);
     }
     
     @FXML
@@ -1066,8 +1099,11 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         ReservationEntity.clearReservation(UserId);
         
-        setUpOrderOfUser();
+        setUpHistoryComboBox();
         
+//        setUpOrderOfUser();
+        
+        clearReservationForm();
     }
     
     private void setUpHistoryComboBox() {
@@ -1088,9 +1124,18 @@ public class FXMLDashBoardConstroller implements Initializable {
             return;
         }
         
+//        bill_history.getSelectionModel().clearSelection();
+        
+        List<Integer> orderNum = new Vector<>();
+        
         for (int i = 0; i < orderList.size(); i++) {
-            bill_history.getItems().addAll(i+1);
+            orderNum.add(i+1);
+//            bill_history.getItems().addAll(i+1);
         }
+        
+        ObservableList<Integer> integerList = FXCollections.observableList(orderNum);
+        
+        bill_history.setItems(integerList);
         
         bill_history.getSelectionModel().selectFirst();
     }
@@ -1109,6 +1154,11 @@ public class FXMLDashBoardConstroller implements Initializable {
         }
        
         for (int i = 0; i < orderList.size(); i++) {
+            
+            if (bill_history.getSelectionModel().getSelectedItem() == null)  {
+                return;
+            }
+            
             if (bill_history.getSelectionModel().getSelectedItem() == i+1) {
                 bill_username.setText(orderList.get(i).getUser().getUsername());
                 bill_email.setText(orderList.get(i).getUser().getEmail());
@@ -1132,8 +1182,11 @@ public class FXMLDashBoardConstroller implements Initializable {
                 
                 bill_TableView.setItems(ticketList);
                 
-                return;
             }
+            
+//            if (bill_history.getSelectionModel().getSelectedItem() == null) {
+//                return;
+//            }
         }
     }
     
