@@ -355,6 +355,9 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Button bill_setStatus_btn;
     
+    @FXML
+    private Label bill_statusList_label;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -738,6 +741,12 @@ public class FXMLDashBoardConstroller implements Initializable {
         users_Btn.setDisable(false);
         if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin") && !UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Employee")) {
             users_Btn.setDisable(true);
+            
+            bill_setStatus_btn.setVisible(false);
+            
+            bill_statusList.setVisible(false);
+            
+            bill_statusList_label.setVisible(false);
         }
     }
     
@@ -1143,6 +1152,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         }
         
         ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+        
+        bill_Btn.setDisable(false);
         
         if (orderList.size() == 0) {
             bill_Btn.setDisable(true);
