@@ -1130,7 +1130,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         for (int i = 0; i < orderList.size(); i++) {
             orderNum.add(i+1);
-//            bill_history.getItems().addAll(i+1);
+//bill_history.getItems().addAll(i+1);
         }
         
         ObservableList<Integer> integerList = FXCollections.observableList(orderNum);
