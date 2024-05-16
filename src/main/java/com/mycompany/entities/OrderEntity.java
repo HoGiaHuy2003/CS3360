@@ -175,6 +175,84 @@ public class OrderEntity extends BaseEntity {
         return dataList;
     }
     
+    public static ObservableList<Order> printOrderList() {
+        open();
+        
+        List<Order> orderList = new Vector<>();
+        
+        Order order = null;
+        
+        try {
+            String sql = "SELECT Users.UserName, Users.Email, Users.PhoneNumber, Order_.OrderId, Order_.OrderDate, Order_.CancelDate, Status.StatusId, Status.StatusName, Ticket.TicketId, Ticket.TicketName, Category.CategoryId, Category.CategoryName, Ticket.StartingPlace, Ticket.EndingPlace, Ticket.DepartmentTime, OrderDetail.Price FROM Users INNER JOIN OrderDetail INNER JOIN Order_ ON OrderDetail.OrderId = Order_.OrderId INNER JOIN Status ON Order_.StatusId = Status.StatusId INNER JOIN Ticket ON OrderDetail.TicketId = Ticket.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId ON Users.UserId = Order_.UserId ORDER BY OrderId ASC;";
+        
+            statement = conn.prepareStatement(sql);
+            
+            ResultSet resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+
+                
+                Users user = new Users();
+                user.setUsername(resultSet.getString("UserName"));
+                user.setEmail(resultSet.getString("Email"));
+                user.setPhoneNumber(resultSet.getString("PhoneNumber"));
+                
+
+                
+                Status status = new Status();
+                status.setStatusId(resultSet.getInt("StatusId"));
+                status.setStatusName(resultSet.getString("StatusName"));
+                
+
+                
+                Ticket ticket = new Ticket();
+                
+                ticket.setTicketId(resultSet.getInt("TicketId"));
+                ticket.setTicketName(resultSet.getString("TicketName"));
+                
+                Category category = new Category();
+                category.setCategoryId(resultSet.getInt("CategoryId"));
+                category.setCategoryName(resultSet.getString("CategoryName"));
+                
+                ticket.setCategory(category);
+                ticket.setPrice(resultSet.getFloat("Price"));
+                ticket.setStartingPlace(resultSet.getString("StartingPlace"));
+                ticket.setEndingPlace(resultSet.getString("EndingPlace"));
+                ticket.setDepartmentTime(resultSet.getDate("DepartmentTime"));
+//                ticket.setCreatedAt(resultSet.getDate("CreatedAt"));
+//                ticket.setUpdatedAt(resultSet.getDate("UpdatedAt"));
+
+                if (order == null || order.getOrderId() != resultSet.getInt("OrderId")) {
+                    order = new Order();
+                }
+
+                order.setUser(user);
+                order.setOrderDate(resultSet.getDate("OrderDate"));
+                order.setCancelDate(resultSet.getDate("CancelDate"));
+                
+                order.setStatus(status);
+                
+                order.getTicketList().add(ticket);
+                
+                if (order.getOrderId() != null && order.getOrderId() == resultSet.getInt("OrderId")) {
+                    continue;
+                }
+                
+                order.setOrderId(resultSet.getInt("OrderId"));
+                
+                orderList.add(order);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        ObservableList<Order> dataList = FXCollections.observableList(orderList);
+
+        
+        return dataList;
+    }
+    
     public static void updateCancelDate(Order order) {
         open();
         

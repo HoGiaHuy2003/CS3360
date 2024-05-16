@@ -358,6 +358,12 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Label bill_statusList_label;
     
+    @FXML
+    private Label bill_userList_label;
+    
+    @FXML
+    private ComboBox<Users> bill_userList;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -385,6 +391,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         setUpOrderOfUser();
         
         setUpStatusList();
+        
+        setUpUserList();
     }    
     
     @FXML
@@ -739,6 +747,17 @@ public class FXMLDashBoardConstroller implements Initializable {
             selectTicket_addBtn.setDisable(true);
         }
         users_Btn.setDisable(false);
+        
+        bill_setStatus_btn.setVisible(true);
+
+        bill_statusList.setVisible(true);
+
+        bill_statusList_label.setVisible(true);
+
+        bill_userList_label.setVisible(true);
+
+        bill_userList.setVisible(true);
+        
         if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin") && !UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Employee")) {
             users_Btn.setDisable(true);
             
@@ -747,6 +766,10 @@ public class FXMLDashBoardConstroller implements Initializable {
             bill_statusList.setVisible(false);
             
             bill_statusList_label.setVisible(false);
+            
+            bill_userList_label.setVisible(false);
+            
+            bill_userList.setVisible(false);
         }
     }
     
@@ -1145,13 +1168,24 @@ public class FXMLDashBoardConstroller implements Initializable {
         clearReservationForm();
     }
     
+    @FXML
     private void setUpHistoryComboBox() {
         Integer UserId = Users.getLoginUserId();
         if (Users.getSelectedUserId() != null) {
             UserId = Users.getSelectedUserId();
         }
         
-        ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+        ObservableList<Order> orderList;
+        
+        if (UserRolesEntity.isAuthorized(UserId, "Admin") || UserRolesEntity.isAuthorized(UserId, "Employee")) {
+            orderList = OrderEntity.printOrderList();
+        } else {
+            orderList = OrderEntity.printOrderListOfUser(UserId);
+        }
+        
+        if (bill_userList.getSelectionModel().getSelectedItem() != null) {
+            orderList = OrderEntity.printOrderListOfUser(bill_userList.getSelectionModel().getSelectedItem().getUserId());
+        }
         
         bill_Btn.setDisable(false);
         
@@ -1188,7 +1222,17 @@ public class FXMLDashBoardConstroller implements Initializable {
             UserId = Users.getSelectedUserId();
         }
         
-        ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+        ObservableList<Order> orderList;
+        
+        if (UserRolesEntity.isAuthorized(UserId, "Admin") || UserRolesEntity.isAuthorized(UserId, "Employee")) {
+            orderList = OrderEntity.printOrderList();
+        } else {
+            orderList = OrderEntity.printOrderListOfUser(UserId);
+        }
+        
+        if (bill_userList.getSelectionModel().getSelectedItem() != null) {
+            orderList = OrderEntity.printOrderListOfUser(bill_userList.getSelectionModel().getSelectedItem().getUserId());
+        }
         
         if (orderList.size() == 0) {
             return;
@@ -1223,6 +1267,10 @@ public class FXMLDashBoardConstroller implements Initializable {
                 
                 bill_TableView.setItems(ticketList);
                 
+                bill_totalPayment.setText(OrderEntity.totalBill(UserId).toString());
+                
+                return;
+                
             }
             
 //            if (bill_history.getSelectionModel().getSelectedItem() == null) {
@@ -1230,7 +1278,7 @@ public class FXMLDashBoardConstroller implements Initializable {
 //            }
         }
         
-        bill_totalPayment.setText(OrderEntity.totalBill(UserId).toString());
+
     }
     
     @FXML
@@ -1285,7 +1333,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         for (int i = 0; i < statusList.size(); i++) {
             if (statusList.get(i).getStatusName().equals(currentStatus)) {
-                bill_statusList.getSelectionModel().select(new Status(statusList.get(i).getStatusId() ,statusList.get(i).getStatusName()));
+                bill_statusList.getSelectionModel().select(statusList.get(i));
                 return;
             }
         }
@@ -1316,4 +1364,20 @@ public class FXMLDashBoardConstroller implements Initializable {
             }
         }
     }
+    
+    private void setUpUserList() {
+        ObservableList<Users> userList = UsersEntity.index();
+        
+        bill_userList.setItems(userList);
+        
+//        setUpHistoryComboBox();
+        
+//        for (int i = 0; i < userList.size(); i++) {
+//            if (userList.get(i).getUsername().equals(bill_username.getText())) {
+//                bill_userList.getSelectionModel().select(userList.get(i));
+//                return;
+//            }
+//        }
+    }
+    
 } 

@@ -519,6 +519,12 @@
                         <Button fx:id="bill_setStatus_btn" layoutX="113.0" layoutY="40.0" mnemonicParsing="false" onAction="#setStatusForOrder" prefHeight="25.0" prefWidth="129.0" text="Set Status For Order" />
                         <ComboBox fx:id="bill_statusList" layoutX="92.0" layoutY="3.0" prefWidth="150.0" />
                         <Label fx:id="bill_statusList_label" layoutX="6.0" layoutY="7.0" prefHeight="22.0" prefWidth="70.0" text="Status List" />
+                        <Label fx:id="bill_userList_label" layoutX="535.0" layoutY="42.0" text="User: ">
+                           <font>
+                              <Font name="Tahoma" size="16.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="bill_userList" layoutX="578.0" layoutY="40.0" onAction="#setUpHistoryComboBox" prefWidth="150.0" />
                      </children>
                   </AnchorPane>
                </children>

@@ -118,6 +118,11 @@ public class Users {
     public void setRoleList(List<Roles> roleList) {
         this.roleList = roleList;
     }
+
+    @Override
+    public String toString() {
+        return username;
+    }
     
     public static Boolean validateAge(Integer age) {
         Pattern pattern = Pattern.compile("^(0?[1-9]|[1-9][0-9]|100|200)$");
