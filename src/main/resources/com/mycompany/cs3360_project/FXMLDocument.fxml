@@ -39,7 +39,7 @@
             <Hyperlink fx:id="signin_hyperlink" layoutX="327.0" layoutY="466.0" onAction="#switchForm" stylesheets="@LoginDesign.css" text="Create an new account?" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="signup_form" prefHeight="453.0" prefWidth="688.0" styleClass="bg-form" stylesheets="@LoginDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="signup_form" prefHeight="453.0" prefWidth="688.0" styleClass="bg-form" stylesheets="@LoginDesign.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="signup_close" layoutX="720.0" layoutY="1.0" mnemonicParsing="false" onAction="#signUp_close" prefHeight="26.0" prefWidth="61.0" styleClass="close" stylesheets="@LoginDesign.css">
                <graphic>
