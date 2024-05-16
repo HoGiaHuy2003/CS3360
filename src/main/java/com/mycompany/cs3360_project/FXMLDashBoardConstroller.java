@@ -1194,6 +1194,17 @@ public class FXMLDashBoardConstroller implements Initializable {
         } else {
             orderList = OrderEntity.printOrderListOfUser(UserId);
             bill_Btn.setDisable(true);
+            
+            if (orderList.size() == 0) {
+
+                bill_form.setVisible(false);
+
+                selectTicket_form.setVisible(true);
+
+                bill_userList.getSelectionModel().clearSelection();
+
+                return;
+            }
         }
         
         if (bill_userList.getSelectionModel().getSelectedItem() != null) {
@@ -1205,6 +1216,12 @@ public class FXMLDashBoardConstroller implements Initializable {
             bill_form.setVisible(false);
 
             selectTicket_form.setVisible(true);
+            
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning!");
+            alert.setHeaderText("No order");
+            alert.setContentText(bill_userList.getSelectionModel().getSelectedItem().getUsername() + " has no order!");
+            alert.showAndWait();
             
             bill_userList.getSelectionModel().clearSelection();
 
