@@ -1184,6 +1184,8 @@ public class FXMLDashBoardConstroller implements Initializable {
 //                return;
 //            }
         }
+        
+        bill_totalPayment.setText(OrderEntity.totalBill(UserId).toString());
     }
     
     @FXML
