@@ -1187,27 +1187,31 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         ObservableList<Order> orderList;
         
+        bill_Btn.setDisable(false);
+        
         if (UserRolesEntity.isAuthorized(UserId, "Admin") || UserRolesEntity.isAuthorized(UserId, "Employee")) {
             orderList = OrderEntity.printOrderList();
         } else {
             orderList = OrderEntity.printOrderListOfUser(UserId);
+            bill_Btn.setDisable(true);
         }
         
         if (bill_userList.getSelectionModel().getSelectedItem() != null) {
             orderList = OrderEntity.printOrderListOfUser(bill_userList.getSelectionModel().getSelectedItem().getUserId());
         }
         
-        bill_Btn.setDisable(false);
-        
         if (orderList.size() == 0) {
-            bill_Btn.setDisable(true);
-            
+
             bill_form.setVisible(false);
-            
+
             selectTicket_form.setVisible(true);
             
+            bill_userList.getSelectionModel().clearSelection();
+
             return;
         }
+        
+        bill_Btn.setDisable(false);
         
 //        bill_history.getSelectionModel().clearSelection();
         
@@ -1354,6 +1358,10 @@ public class FXMLDashBoardConstroller implements Initializable {
         Integer UserId = Users.getLoginUserId();
         if (Users.getSelectedUserId() != null) {
             UserId = Users.getSelectedUserId();
+        }
+        
+        if (bill_userList.getSelectionModel().getSelectedItem() != null) {
+            UserId = bill_userList.getSelectionModel().getSelectedItem().getUserId();
         }
         
         List<Order> orderList = OrderEntity.findOrderListByUser(UserId);
