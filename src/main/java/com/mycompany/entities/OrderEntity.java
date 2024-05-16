@@ -258,5 +258,25 @@ public class OrderEntity extends BaseEntity {
         
         return null;
     }
+    
+    public static void editStatusForOrder(Integer OrderId, Integer StatusId) {
+        open();
+        
+        try {
+            String sql = "UPDATE Order_ SET StatusId = ? WHERE OrderId = ?";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setInt(1, StatusId);
+            statement.setInt(2, OrderId);
+            
+            statement.execute();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+    }
 }
 

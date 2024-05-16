@@ -349,6 +349,12 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Label bill_username;
     
+    @FXML
+    private ComboBox<Status> bill_statusList;
+    
+    @FXML
+    private Button bill_setStatus_btn;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -374,6 +380,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         setUpHistoryComboBox();
         
         setUpOrderOfUser();
+        
+        setUpStatusList();
     }    
     
     @FXML
@@ -693,6 +701,8 @@ public class FXMLDashBoardConstroller implements Initializable {
             }
             
             UserRolesEntity.deleteByUserId(Users.getLoginUserId());
+            
+            ReservationEntity.clearReservation(Users.getLoginUserId());
         
             ObservableList<Order> orderListOfUserDeleted = OrderEntity.printOrderListOfUser(Users.getLoginUserId());
 
@@ -801,7 +811,20 @@ public class FXMLDashBoardConstroller implements Initializable {
         String ticketName = selectTicket_ticketName.getText();
         String startingPlace = selectTicket_startingPlace.getText();
         String endingPlace = selectTicket_endingPlace.getText();
-        Float price = Float.valueOf(selectTicket_price.getText());
+        Float price = null;
+        
+        if (Ticket.validatePrice(selectTicket_price.getText().toString())) {
+            price = Float.valueOf(selectTicket_price.getText());
+        } 
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Add Ticket Failure!!!");
+            alert.setContentText("Price must be a positive floating point number, please try again!!!");
+            alert.showAndWait();
+            return;
+        }
+        
         String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
         Integer categoryId = null;
         List<Category> categoryList = CategoryEntity.getCategoryList();
@@ -817,7 +840,18 @@ public class FXMLDashBoardConstroller implements Initializable {
 //        else {
 //            categoryId = 2;
 //        }
+
         LocalDate selectedDate = selectTicket_Date.getValue();
+        
+        if (selectedDate.isBefore(LocalDate.now())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Add Ticket Failure!!!");
+            alert.setContentText("Departure time must be after nowadays, please try again!!!");
+            alert.showAndWait();
+            return;
+        }
+        
         Date departmentDate = java.sql.Date.valueOf(selectedDate);
         Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date updateAt = creatAt;
@@ -1226,6 +1260,48 @@ public class FXMLDashBoardConstroller implements Initializable {
                     
                     return;
                 }
+            }
+        }
+    }
+    
+//    @FXML
+    private void setUpStatusList() {
+        ObservableList<Status> statusList = StatusEntity.getStatusList();
+        
+        bill_statusList.setItems(statusList);
+        
+        String currentStatus = bill_status.getText();
+        
+        for (int i = 0; i < statusList.size(); i++) {
+            if (statusList.get(i).getStatusName().equals(currentStatus)) {
+                bill_statusList.getSelectionModel().select(new Status(statusList.get(i).getStatusId() ,statusList.get(i).getStatusName()));
+                return;
+            }
+        }
+    }
+    
+    @FXML
+    private void setStatusForOrder() {
+        Integer UserId = Users.getLoginUserId();
+        if (Users.getSelectedUserId() != null) {
+            UserId = Users.getSelectedUserId();
+        }
+        
+        List<Order> orderList = OrderEntity.findOrderListByUser(UserId);
+        
+        for (int i = 0; i < orderList.size(); i++) {
+            if (bill_history.getSelectionModel().getSelectedItem() == i+1) {
+                OrderEntity.editStatusForOrder(orderList.get(i).getOrderId(), bill_statusList.getSelectionModel().getSelectedItem().getStatusId());
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success!!!");
+                alert.setHeaderText("Set status for order successfully!!!");
+                alert.setContentText("Status: " + bill_statusList.getSelectionModel().getSelectedItem().getStatusName() + "is set for this order.");
+                alert.showAndWait();
+                
+                setUpOrderOfUser();
+                
+                return;
             }
         }
     }
