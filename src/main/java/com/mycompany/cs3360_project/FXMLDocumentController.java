@@ -170,6 +170,9 @@ public class FXMLDocumentController implements Initializable {
            user.setPassword(signin_password.getText().toString());
 
            Users userLogin = UsersEntity.login(user);
+           
+           
+
            if (userLogin != null) {
                 
                 Users.setLoginUserId(userLogin.getUserId());
@@ -184,6 +187,12 @@ public class FXMLDocumentController implements Initializable {
                switchToDashBoard();
            } else {
                errorLogin();
+               
+               Users.setCountFailureLoginNumber(Users.getCountFailureLoginNumber() + 1);
+               
+               if (Users.getCountFailureLoginNumber() == 3) {
+                   System.exit(0);
+               }
            }
            return;
         } // Sign In Method

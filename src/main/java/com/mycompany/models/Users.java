@@ -31,6 +31,8 @@ public class Users {
     private static Integer loginUserId;
     
     private static Integer selectedUserId;
+    
+    private static Integer countFailureLoginNumber = 0;
 
     public static Integer getLoginUserId() {
         return loginUserId;
@@ -46,6 +48,14 @@ public class Users {
 
     public static void setSelectedUserId(Integer selectedUserId) {
         Users.selectedUserId = selectedUserId;
+    }
+
+    public static Integer getCountFailureLoginNumber() {
+        return countFailureLoginNumber;
+    }
+
+    public static void setCountFailureLoginNumber(Integer countFailureLoginNumber) {
+        Users.countFailureLoginNumber = countFailureLoginNumber;
     }
 
     public Users() {
