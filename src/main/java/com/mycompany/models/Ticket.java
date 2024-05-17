@@ -4,6 +4,7 @@
  */
 package com.mycompany.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -143,6 +144,14 @@ public class Ticket {
 //        return false;
 
         if (price > 0) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public static Boolean isBeforeCurrentDate(LocalDate dateSelected) {
+        if (dateSelected.isBefore(LocalDate.now())) {
             return true;
         }
         

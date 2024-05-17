@@ -885,7 +885,7 @@ public class FXMLDashBoardConstroller implements Initializable {
 
         LocalDate selectedDate = selectTicket_Date.getValue();
         
-        if (selectedDate.isBefore(LocalDate.now())) {
+        if (Ticket.isBeforeCurrentDate(selectedDate)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!!!");
             alert.setHeaderText("Add Ticket Failure!!!");
