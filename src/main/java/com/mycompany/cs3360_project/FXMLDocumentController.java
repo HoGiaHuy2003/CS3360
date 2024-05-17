@@ -214,14 +214,18 @@ public class FXMLDocumentController implements Initializable {
                 
                 String username = signup_username.getText().toString();
                 
-                if (UsersEntity.checkExisted(username) != null) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error!!!");
-                    alert.setHeaderText("Cannot register!!!");
-                    alert.setContentText("Username is already existed, please choose another username!!!");
-                    alert.showAndWait();
-                    return;
-                } 
+                if (Users.getLoginUserId() == null) {
+                    if (UsersEntity.checkExisted(username) != null) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error!!!");
+                        alert.setHeaderText("Cannot register!!!");
+                        alert.setContentText("Username is already existed, please choose another username!!!");
+                        alert.showAndWait();
+                        return;
+                    } 
+                }
+                
+
                 
                 if (!Users.validatePasswordHash(signup_password.getText().toString())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
