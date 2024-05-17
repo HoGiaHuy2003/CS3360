@@ -4,8 +4,13 @@
  */
 package com.mycompany.models;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -159,6 +164,25 @@ public class Users {
         }
         return false;
     }
+    
+//    public static String md5PasswordHash(String passwordHash) {
+//
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//            
+//            byte[] hashInBytes = md.digest(passwordHash.getBytes(StandardCharsets.UTF_8));
+//            StringBuffer sb = new StringBuffer();
+//            for (byte b : hashInBytes) {
+//                sb.append(String.format("%02x", b));
+//            }
+//            passwordHash = sb.toString();
+//
+//        } catch (NoSuchAlgorithmException ex) {
+//            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return passwordHash;
+//    }
     
 //    public static String generateString(int length) {
 //        String alphabet = "abcdefghijklmnopqrstuvwxyz";

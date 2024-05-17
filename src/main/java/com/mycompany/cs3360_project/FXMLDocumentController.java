@@ -171,7 +171,16 @@ public class FXMLDocumentController implements Initializable {
 
            Users userLogin = UsersEntity.login(user);
            if (userLogin != null) {
-               Users.setLoginUserId(userLogin.getUserId());
+                
+                Users.setLoginUserId(userLogin.getUserId());
+               
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successfully!!!");
+                alert.setHeaderText("Log in successfully!!!");
+                alert.setContentText("Account " + user.getUsername() + " is logged in!!!");
+                alert.showAndWait();
+               
+
                switchToDashBoard();
            } else {
                errorLogin();
@@ -244,10 +253,24 @@ public class FXMLDocumentController implements Initializable {
                     UsersEntity.insert(user); 
                     signIn_form.setVisible(true);
                     signup_form.setVisible(false);
+                    
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Successfully!!!");
+                    alert.setHeaderText("Register successfully!!!");
+                    alert.setContentText("Your account is registered!!!");
+                    alert.showAndWait();
+                    
                 } // Register 
                 else {
                     user.setUserId(Users.getLoginUserId());
                     UsersEntity.update(user);
+                    
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Successfully!!!");
+                    alert.setHeaderText("Update Information successfully!!!");
+                    alert.setContentText("Your information is updated!!!");
+                    alert.showAndWait();
+                    
                     switchToDashBoard();
                 } // Edit User Information
                 
