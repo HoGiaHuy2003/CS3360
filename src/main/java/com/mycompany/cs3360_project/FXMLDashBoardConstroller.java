@@ -547,6 +547,15 @@ public class FXMLDashBoardConstroller implements Initializable {
     private void addRole() {
         String roleName = role_name.getText().toString();
         
+        if (RolesEntity.checkExisted(roleName) != null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Cannot add role!!!");
+            alert.setContentText("Role is already existed, please add another role!!!");
+            alert.showAndWait();
+            return;
+        }
+        
         Roles newRole = new Roles();
         newRole.setRoleName(roleName);
         
@@ -781,9 +790,9 @@ public class FXMLDashBoardConstroller implements Initializable {
             
             bill_statusList.setVisible(false);
             
-            bill_statusList_label.setVisible(false);
+//            bill_statusList_label.setVisible(false);
             
-            bill_userList_label.setVisible(false);
+//            bill_userList_label.setVisible(false);
             
             bill_userList.setVisible(false);
         }
@@ -1347,7 +1356,9 @@ public class FXMLDashBoardConstroller implements Initializable {
                 
                 bill_TableView.setItems(ticketList);
                 
-                bill_totalPayment.setText(OrderEntity.totalBill(UserId).toString());
+                Float totalBill = OrderEntity.totalBill(orderList.get(i).getUser().getUserId(), orderList.get(i).getOrderId());
+                
+                bill_totalPayment.setText(totalBill.toString());
                 
                 return;
                 

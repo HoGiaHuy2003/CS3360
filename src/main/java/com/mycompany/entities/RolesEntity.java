@@ -126,4 +126,28 @@ public class RolesEntity extends BaseEntity {
 
         return role;
     }
+    
+    public static Roles checkExisted(String checkedRole) {
+        Roles role = null;
+        open();
+
+        try {
+            String sql = "SELECT * FROM Roles WHERE NormalizedRoleName = ?";
+            statement = conn.prepareStatement(sql);
+            
+            statement.setString(1, checkedRole.toUpperCase());
+            
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                role = new Roles(resultSet.getInt("RoleId"), resultSet.getString("RoleName"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UsersEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+        
+        return role;
+    }
 }

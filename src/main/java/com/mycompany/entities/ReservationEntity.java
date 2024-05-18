@@ -126,7 +126,7 @@ public class ReservationEntity extends BaseEntity {
         open();
         
         try {
-            String sql = "SELECT SUM(Price) 'Total Price' FROM Ticket INNER JOIN Reservation ON Ticket.TicketId = Reservation.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Reservation.UserId = Users.UserId WHERE Users.UserId = ?;";
+            String sql = "SELECT SUM(Price) 'Total Price' FROM Ticket INNER JOIN Reservation ON Ticket.TicketId = Reservation.TicketId LEFT JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Reservation.UserId = Users.UserId WHERE Users.UserId = ?;";
             
             statement = conn.prepareStatement(sql);
             
