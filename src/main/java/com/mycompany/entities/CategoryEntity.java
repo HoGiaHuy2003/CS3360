@@ -63,6 +63,8 @@ public class CategoryEntity {
             
         } catch (SQLException ex) {
             Logger.getLogger(CategoryEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
         }
     }
 }

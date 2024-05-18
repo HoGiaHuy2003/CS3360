@@ -168,6 +168,8 @@ public class OrderEntity extends BaseEntity {
             
         } catch (SQLException ex) {
             Logger.getLogger(OrderEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
         }
         
         ObservableList<Order> dataList = FXCollections.observableList(orderList);
@@ -247,6 +249,8 @@ public class OrderEntity extends BaseEntity {
             
         } catch (SQLException ex) {
             Logger.getLogger(OrderEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
         }
         
         ObservableList<Order> dataList = FXCollections.observableList(orderList);

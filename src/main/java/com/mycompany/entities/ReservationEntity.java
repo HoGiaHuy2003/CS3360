@@ -36,7 +36,7 @@ public class ReservationEntity extends BaseEntity {
         }
     }
     
-    public static void deleteTicketFromReservation (Integer UserId, Integer TicketId) {
+    public static void deleteTicketFromReservation(Integer UserId, Integer TicketId) {
         open();
         
         try {
@@ -135,6 +135,8 @@ public class ReservationEntity extends BaseEntity {
             
         } catch (SQLException ex) {
             Logger.getLogger(ReservationEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
         }
         
         return reservation;
