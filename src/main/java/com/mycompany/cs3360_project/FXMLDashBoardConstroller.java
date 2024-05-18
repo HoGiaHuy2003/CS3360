@@ -410,32 +410,27 @@ public class FXMLDashBoardConstroller implements Initializable {
     
     @FXML
     private void switchForm(ActionEvent event) {
-        if(event.getSource() == dashBoard_Btn){
-            dashBoard_form.setVisible(true);
-            selectTicket_form.setVisible(false);
-            bookingTicket_form.setVisible(false);
-            users_form.setVisible(false);
-            bill_form.setVisible(false);
-        } else if(event.getSource() == selectTicket_Btn) {
-            dashBoard_form.setVisible(false);
+        
+        if(event.getSource() == selectTicket_Btn) {
+            
             selectTicket_form.setVisible(true);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(false);
             bill_form.setVisible(false);
         } else if(event.getSource() == bookingTicket_Btn) {
-            dashBoard_form.setVisible(false);
+            
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(true);
             users_form.setVisible(false);
             bill_form.setVisible(false);
         } else if(event.getSource() == users_Btn) {
-            dashBoard_form.setVisible(false);
+            
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(true);
             bill_form.setVisible(false);
         } else if(event.getSource() == bill_Btn) {
-            dashBoard_form.setVisible(false);
+            
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(false);
@@ -737,13 +732,13 @@ public class FXMLDashBoardConstroller implements Initializable {
     } 
     
     private void authorization() {
-        dashBoard_Btn.setDisable(false);
+        
         roleAuthorize_btn.setDisable(false);
         role_addBtn.setDisable(false);
         role_deleteBtn.setDisable(false);
         selectTicket_addBtn.setDisable(false);
         if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin")) {
-            dashBoard_Btn.setDisable(true);
+            
             roleAuthorize_btn.setDisable(true);
             role_addBtn.setDisable(true);
             role_deleteBtn.setDisable(true);
@@ -755,9 +750,6 @@ public class FXMLDashBoardConstroller implements Initializable {
 
         bill_statusList.setVisible(true);
 
-        bill_statusList_label.setVisible(true);
-
-        bill_userList_label.setVisible(true);
 
         bill_userList.setVisible(true);
         
