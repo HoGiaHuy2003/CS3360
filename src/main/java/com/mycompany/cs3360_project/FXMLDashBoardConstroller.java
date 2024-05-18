@@ -674,6 +674,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         Users.setLoginUserId(null);
         Users.setSelectedUserId(null);
         Ticket.setSelectedTicketId(null);
+        Users.setCountFailureLoginNumber(0);
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         Stage stage = new Stage();
         Scene scene = new Scene(root);
