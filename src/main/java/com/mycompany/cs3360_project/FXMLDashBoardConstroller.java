@@ -67,6 +67,7 @@ public class FXMLDashBoardConstroller implements Initializable {
      */
     @FXML
     private Button bill_Btn;
+
     @FXML
     private Button selectTicket_Btn;
 
