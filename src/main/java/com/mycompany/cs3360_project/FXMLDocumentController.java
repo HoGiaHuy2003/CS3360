@@ -4,7 +4,10 @@
  */
 package com.mycompany.cs3360_project;
 
+import com.mycompany.entities.RolesEntity;
+import com.mycompany.entities.UserRolesEntity;
 import com.mycompany.entities.UsersEntity;
+import com.mycompany.models.Roles;
 import com.mycompany.models.Users;
 import java.io.IOException;
 import java.net.URL;
@@ -268,6 +271,13 @@ public class FXMLDocumentController implements Initializable {
                     alert.setHeaderText("Register successfully!!!");
                     alert.setContentText("Your account is registered!!!");
                     alert.showAndWait();
+                    
+                    if (UsersEntity.index().size() == 1 && RolesEntity.index().size() == 0) {
+                        Roles admin = new Roles(1, "Admin");
+                        RolesEntity.insert(admin);
+                        UserRolesEntity.insert(user.getUserId(), admin.getRoleId());
+                    }
+                    
                     
                 } // Register 
                 else {
