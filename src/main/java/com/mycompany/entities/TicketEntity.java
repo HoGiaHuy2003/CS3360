@@ -30,7 +30,11 @@ public class TicketEntity extends BaseEntity {
             statement = conn.prepareStatement(sql);
             
             statement.setString(1, newTicket.getTicketName());
-            statement.setInt(2, newTicket.getCategory().getCategoryId());
+            if (newTicket.getCategory() == null) {
+                statement.setString(2, null);
+            } else {
+                statement.setInt(2, newTicket.getCategory().getCategoryId());
+            }
             statement.setFloat(3, newTicket.getPrice());
             statement.setString(4, newTicket.getStartingPlace());
             statement.setString(5, newTicket.getEndingPlace());

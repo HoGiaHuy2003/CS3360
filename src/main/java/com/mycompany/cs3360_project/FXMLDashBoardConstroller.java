@@ -52,8 +52,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -662,6 +664,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         }
         login_role_of_user.setText("Your role: " + roleList);
     }
+    private double x = 0;
+    private double y = 0;
     
     @FXML 
     private void signOut() throws IOException {
@@ -673,6 +677,23 @@ public class FXMLDashBoardConstroller implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         Stage stage = new Stage();
         Scene scene = new Scene(root);
+        root.setOnMousePressed((MouseEvent event) -> {
+            x = event.getSceneX();
+            y = event.getSceneY();
+        });
+
+        root.setOnMouseDragged((MouseEvent event) -> {
+            stage.setX(event.getScreenX() - x);
+            stage.setY(event.getScreenY() - y);
+            
+            stage.setOpacity(0.8);
+        });
+        
+        root.setOnMouseReleased((MouseEvent event) -> {
+            stage.setOpacity(1);
+        });
+
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
     }
@@ -861,7 +882,12 @@ public class FXMLDashBoardConstroller implements Initializable {
             return;
         }
         
-        String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
+        String categoryName = null;
+        
+        if (selectTicket_category.getSelectionModel().getSelectedItem() != null) {
+            categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
+        }
+        
         Integer categoryId = null;
         List<Category> categoryList = CategoryEntity.getCategoryList();
         // Find category ID
@@ -881,6 +907,17 @@ public class FXMLDashBoardConstroller implements Initializable {
 
 
 
+
+        
+        if (selectTicket_Date.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Add Ticket Failure!!!");
+            alert.setContentText("Departure time must not be null, please try again!!!");
+            alert.showAndWait();
+            return;
+        }
+        
         LocalDate selectedDate = selectTicket_Date.getValue();
         
         if (Ticket.isBeforeCurrentDate(selectedDate)) {
@@ -896,8 +933,18 @@ public class FXMLDashBoardConstroller implements Initializable {
         //Get creat and update Time
         Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date updateAt = creatAt;
+
         //Integer distance = null;
-        Category category = new Category(categoryId, categoryName);
+//        Category category = new Category(categoryId, categoryName);
+
+        Integer distance = null;
+        
+        Category category = null;
+        if (categoryId != null) {
+            category = new Category(categoryId, categoryName);
+        }
+ 
+
         Ticket newTicket = new Ticket(ticketName, category, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
         // Attempt to insert the new ticket into the database
         TicketEntity.insert(newTicket);

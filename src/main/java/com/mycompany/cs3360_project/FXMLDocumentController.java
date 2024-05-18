@@ -24,8 +24,10 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -141,12 +143,31 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
+    private double x = 0;
+    private double y = 0;
     private void switchToDashBoard() throws IOException {
 //        App.setRoot("dashboard");
        signinbtn.getScene().getWindow().hide();
        Parent root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
        Stage stage = new Stage();
        Scene scene = new Scene(root);
+       root.setOnMousePressed((MouseEvent event) -> {
+            x = event.getSceneX();
+            y = event.getSceneY();
+        });
+
+        root.setOnMouseDragged((MouseEvent event) -> {
+            stage.setX(event.getScreenX() - x);
+            stage.setY(event.getScreenY() - y);
+            
+            stage.setOpacity(0.8);
+        });
+        
+        root.setOnMouseReleased((MouseEvent event) -> {
+            stage.setOpacity(1);
+        });
+
+        stage.initStyle(StageStyle.TRANSPARENT);
        stage.setScene(scene);
        stage.show();
     }
