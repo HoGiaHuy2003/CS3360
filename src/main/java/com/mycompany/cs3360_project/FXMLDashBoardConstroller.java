@@ -1218,7 +1218,7 @@ public class FXMLDashBoardConstroller implements Initializable {
             orderList = OrderEntity.printOrderListOfUser(bill_userList.getSelectionModel().getSelectedItem().getUserId());
         }
         
-        if (orderList.size() == 0) {
+        if (orderList.size() == 0 && bill_userList.getSelectionModel().getSelectedItem() != null) {
 
             bill_form.setVisible(false);
 
