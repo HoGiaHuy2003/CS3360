@@ -189,13 +189,21 @@ public class FXMLDocumentController implements Initializable {
 
                switchToDashBoard();
            } else {
-               errorLogin();
                
                Users.setCountFailureLoginNumber(Users.getCountFailureLoginNumber() + 1);
                
                if (Users.getCountFailureLoginNumber() == 3) {
-                   System.exit(0);
+                   
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error!!!");
+                    alert.setHeaderText("Log in fail 3 times consecutively!!!");
+                    alert.setContentText("You failed to log in 3 times consecutively, the program will close currently.");
+                    alert.showAndWait();
+                   
+                    System.exit(0);
                }
+               
+                errorLogin();
            }
            return;
         } // Sign In Method
@@ -277,7 +285,6 @@ public class FXMLDocumentController implements Initializable {
                         RolesEntity.insert(admin);
                         UserRolesEntity.insert(user.getUserId(), admin.getRoleId());
                     }
-                    
                     
                 } // Register 
                 else {
