@@ -412,27 +412,22 @@ public class FXMLDashBoardConstroller implements Initializable {
     
     @FXML
     private void switchForm(ActionEvent event) {
-        
         if(event.getSource() == selectTicket_Btn) {
-            
             selectTicket_form.setVisible(true);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(false);
             bill_form.setVisible(false);
         } else if(event.getSource() == bookingTicket_Btn) {
-            
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(true);
             users_form.setVisible(false);
             bill_form.setVisible(false);
         } else if(event.getSource() == users_Btn) {
-            
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(true);
             bill_form.setVisible(false);
         } else if(event.getSource() == bill_Btn) {
-            
             selectTicket_form.setVisible(false);
             bookingTicket_form.setVisible(false);
             users_form.setVisible(false);
@@ -673,6 +668,7 @@ public class FXMLDashBoardConstroller implements Initializable {
         }
         login_role_of_user.setText("Your role: " + roleList);
     }
+    
     private double x = 0;
     private double y = 0;
     
@@ -773,15 +769,18 @@ public class FXMLDashBoardConstroller implements Initializable {
             role_addBtn.setDisable(true);
             role_deleteBtn.setDisable(true);
             selectTicket_addBtn.setDisable(true);
+            
         }
+        
         users_Btn.setDisable(false);
         
         bill_setStatus_btn.setVisible(true);
 
         bill_statusList.setVisible(true);
 
-
         bill_userList.setVisible(true);
+        
+        bill_cancelBtn.setVisible(false);
         
         if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin") && !UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Employee")) {
             users_Btn.setDisable(true);
@@ -795,6 +794,8 @@ public class FXMLDashBoardConstroller implements Initializable {
 //            bill_userList_label.setVisible(false);
             
             bill_userList.setVisible(false);
+            
+            bill_cancelBtn.setVisible(true);
         }
     }
     
@@ -911,13 +912,10 @@ public class FXMLDashBoardConstroller implements Initializable {
 //        }
 //        else {
 //            categoryId = 2;
-//        }
-        //get DepartureDate
 
 
 
-
-        
+        //get DepartureDate        
         if (selectTicket_Date.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!!!");
@@ -1041,14 +1039,27 @@ public class FXMLDashBoardConstroller implements Initializable {
         Category category = new Category(categoryId, categoryName);
         Ticket updateTicket = new Ticket(ticketName, category, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
         if (Ticket.getSelectedTicketId() == null) {
-            // ERROR CANNOT EDITED BECAUSE NO TICKET IS SELECTED TO DELETE
+            // ERROR CANNOT EDITED BECAUSE NO TICKET IS SELECTED TO UPDATE
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Cannot edit information of ticket!!!");
+            alert.setContentText("No Ticket was selected");
+            alert.showAndWait();
             return;
         }
         updateTicket.setTicketId(Ticket.getSelectedTicketId());
         // Attempt to insert the new ticket into the database
         TicketEntity.update(updateTicket);
         System.out.println("Ticket updated successfully!");
+        
         setValueForTicketTableView();
+            
+        setUpOrderOfUser();
+
+        setUpReservationForm();
+
+        setUpHistoryComboBox();
+        
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success!!!");
         alert.setHeaderText("Ticket is updated successfully!!!");
@@ -1070,7 +1081,47 @@ public class FXMLDashBoardConstroller implements Initializable {
     
     @FXML 
     private void deleteTicket() {
+        if (Ticket.getSelectedTicketId() == null) {
+            // ERROR CANNOT EDITED BECAUSE NO TICKET IS SELECTED TO UPDATE
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Cannot edit information of ticket!!!");
+            alert.setContentText("No Ticket was selected");
+            alert.showAndWait();
+            return;
+        }
         
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete this ticket: ");
+        alert.setHeaderText("Are you sure want to delete this ticket?");
+
+        Optional<ButtonType> option = alert.showAndWait();
+        
+        if (option.get() == null) {
+            
+        } else if (option.get() == ButtonType.OK) {
+            Integer deletedTicketId = Ticket.getSelectedTicketId();
+            
+            OrderEntity.deleteTicketFromOrder(deletedTicketId);
+            
+            ReservationEntity.deleteTicket(deletedTicketId);
+            
+            TicketEntity.delete(deletedTicketId);
+            
+            Ticket.setSelectedTicketId(null);
+            
+            disableUpdateAndDelete();
+            
+            setTicketForUpdatedForm();
+            
+            setValueForTicketTableView();
+            
+            setUpOrderOfUser();
+            
+            setUpReservationForm();
+            
+            setUpHistoryComboBox();
+        } 
     }
     
     @FXML
@@ -1165,7 +1216,7 @@ public class FXMLDashBoardConstroller implements Initializable {
                 UserId = Users.getSelectedUserId();
             } 
             
-            ReservationEntity.deleteTicketByUserId(UserId, Ticket.getSelectedTicketId());
+            ReservationEntity.deleteTicketFromReservation(UserId, Ticket.getSelectedTicketId());
             
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success!!!");
@@ -1441,7 +1492,31 @@ public class FXMLDashBoardConstroller implements Initializable {
             UserId = bill_userList.getSelectionModel().getSelectedItem().getUserId();
         }
         
-        List<Order> orderList = OrderEntity.findOrderListByUser(UserId);
+        ObservableList<Order> orderList;
+        
+        bill_Btn.setDisable(false);
+        
+        if (UserRolesEntity.isAuthorized(UserId, "Admin") || UserRolesEntity.isAuthorized(UserId, "Employee")) {
+            orderList = OrderEntity.printOrderList();
+        } else {
+            orderList = OrderEntity.printOrderListOfUser(UserId);
+            bill_Btn.setDisable(true);
+            
+            if (orderList.size() == 0) {
+
+                bill_form.setVisible(false);
+
+                selectTicket_form.setVisible(true);
+
+                bill_userList.getSelectionModel().clearSelection();
+
+                return;
+            }
+        }
+        
+        if (bill_userList.getSelectionModel().getSelectedItem() != null) {
+            orderList = OrderEntity.printOrderListOfUser(bill_userList.getSelectionModel().getSelectedItem().getUserId());
+        }
         
         for (int i = 0; i < orderList.size(); i++) {
             if (bill_history.getSelectionModel().getSelectedItem() == i+1) {

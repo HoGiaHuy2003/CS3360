@@ -36,7 +36,7 @@ public class ReservationEntity extends BaseEntity {
         }
     }
     
-    public static void deleteTicketByUserId (Integer UserId, Integer TicketId) {
+    public static void deleteTicketFromReservation (Integer UserId, Integer TicketId) {
         open();
         
         try {
@@ -46,6 +46,24 @@ public class ReservationEntity extends BaseEntity {
             
             statement.setInt(1, UserId);
             statement.setInt(2, TicketId);
+            
+            statement.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservationEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+    }
+    
+    public static void deleteTicket(Integer TicketId) {
+        open();
+        
+        try {
+            String sql = "DELETE FROM Reservation WHERE TicketId = ?";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setInt(1, TicketId);
             
             statement.execute();
         } catch (SQLException ex) {

@@ -314,6 +314,25 @@ public class OrderEntity extends BaseEntity {
         }
     }
     
+    public static void deleteTicketFromOrder(Integer TicketId) {
+        open();
+        
+        try {
+            String sql = "DELETE FROM OrderDetail WHERE TicketId = ?";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setInt(1, TicketId);
+            
+            statement.execute();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+    }
+    
     public static Float totalBill(Integer UserId, Integer OrderId) {
         open();
         
