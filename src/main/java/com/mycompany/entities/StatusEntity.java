@@ -48,7 +48,7 @@ public class StatusEntity extends BaseEntity {
         open();
         
         try {
-            String sql = "INSERT INTO Category (StatusName) VALUES (?);";
+            String sql = "INSERT INTO Status (StatusName) VALUES (?);";
             
             statement = conn.prepareStatement(sql);
             
