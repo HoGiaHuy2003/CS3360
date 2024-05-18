@@ -198,8 +198,6 @@ public class FXMLDocumentController implements Initializable {
            user.setPassword(signin_password.getText().toString());
 
            Users userLogin = UsersEntity.login(user);
-           
-           
 
            if (userLogin != null) {
                 
@@ -306,7 +304,8 @@ public class FXMLDocumentController implements Initializable {
                     if (UsersEntity.index().size() == 1 && RolesEntity.index().size() == 0) {
                         Roles admin = new Roles(1, "Admin");
                         RolesEntity.insert(admin);
-                        UserRolesEntity.insert(user.getUserId(), admin.getRoleId());
+                        user.setUserId(UsersEntity.index().get(0).getUserId());
+                        UserRolesEntity.insert(user.getUserId(), RolesEntity.index().get(0).getRoleId());
                         
                         Status status = new Status(1, "Waiting For Payment");
                         
