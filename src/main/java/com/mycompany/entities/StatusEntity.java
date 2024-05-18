@@ -43,4 +43,21 @@ public class StatusEntity extends BaseEntity {
         
         return dataList;
     }
+    
+    public static void insert(Status newStatus) {
+        open();
+        
+        try {
+            String sql = "INSERT INTO Category (StatusName) VALUES (?);";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setString(1, newStatus.getStatusName());
+            
+            statement.execute();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

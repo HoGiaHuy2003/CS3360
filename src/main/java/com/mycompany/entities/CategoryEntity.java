@@ -48,4 +48,21 @@ public class CategoryEntity {
         
         return dataList;
     }
+    
+    public static void insert(Category newCategory) {
+        open();
+        
+        try {
+            String sql = "INSERT INTO Category (CategoryName) VALUES (?);";
+            
+            statement = conn.prepareStatement(sql);
+            
+            statement.setString(1, newCategory.getCategoryName());
+            
+            statement.execute();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

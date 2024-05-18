@@ -4,10 +4,14 @@
  */
 package com.mycompany.cs3360_project;
 
+import com.mycompany.entities.CategoryEntity;
 import com.mycompany.entities.RolesEntity;
+import com.mycompany.entities.StatusEntity;
 import com.mycompany.entities.UserRolesEntity;
 import com.mycompany.entities.UsersEntity;
+import com.mycompany.models.Category;
 import com.mycompany.models.Roles;
+import com.mycompany.models.Status;
 import com.mycompany.models.Users;
 import java.io.IOException;
 import java.net.URL;
@@ -168,8 +172,8 @@ public class FXMLDocumentController implements Initializable {
         });
 
         stage.initStyle(StageStyle.TRANSPARENT);
-       stage.setScene(scene);
-       stage.show();
+        stage.setScene(scene);
+        stage.show();
     }
     
     private void errorLogin() {
@@ -275,8 +279,6 @@ public class FXMLDocumentController implements Initializable {
                     } 
                 }
                 
-
-                
                 if (!Users.validatePasswordHash(signup_password.getText().toString())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error!!!");
@@ -305,6 +307,34 @@ public class FXMLDocumentController implements Initializable {
                         Roles admin = new Roles(1, "Admin");
                         RolesEntity.insert(admin);
                         UserRolesEntity.insert(user.getUserId(), admin.getRoleId());
+                        
+                        Status status = new Status(1, "Waiting For Payment");
+                        
+                        StatusEntity.insert(status);
+                        
+                        status.setStatusId(2);
+                        status.setStatusName("Cancelled");
+                        
+                        StatusEntity.insert(status);
+                        
+                        status.setStatusId(3);
+                        status.setStatusName("Succeed");
+                        
+                        StatusEntity.insert(status);
+                        
+                        Category category = new Category(1, "Economy");
+                        
+                        CategoryEntity.insert(category);
+                        
+                        category.setCategoryId(2);
+                        category.setCategoryName("Business");
+                        
+                        CategoryEntity.insert(category);
+                        
+                        category.setCategoryId(3);
+                        category.setCategoryName("First Class");
+                        
+                        CategoryEntity.insert(category);
                     }
                     
                 } // Register 
