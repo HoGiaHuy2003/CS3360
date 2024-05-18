@@ -868,7 +868,12 @@ public class FXMLDashBoardConstroller implements Initializable {
             return;
         }
         
-        String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
+        String categoryName = null;
+        
+        if (selectTicket_category.getSelectionModel().getSelectedItem() != null) {
+            categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
+        }
+        
         Integer categoryId = null;
         List<Category> categoryList = CategoryEntity.getCategoryList();
         for (int i = 0; i < categoryList.size(); i++) {
@@ -883,7 +888,16 @@ public class FXMLDashBoardConstroller implements Initializable {
 //        else {
 //            categoryId = 2;
 //        }
-
+        
+        if (selectTicket_Date.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Add Ticket Failure!!!");
+            alert.setContentText("Departure time must not be null, please try again!!!");
+            alert.showAndWait();
+            return;
+        }
+        
         LocalDate selectedDate = selectTicket_Date.getValue();
         
         if (Ticket.isBeforeCurrentDate(selectedDate)) {
@@ -899,7 +913,12 @@ public class FXMLDashBoardConstroller implements Initializable {
         Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date updateAt = creatAt;
         Integer distance = null;
-        Category category = new Category(categoryId, categoryName);
+        
+        Category category = null;
+        if (categoryId != null) {
+            category = new Category(categoryId, categoryName);
+        }
+ 
         Ticket newTicket = new Ticket(ticketName, category, price, startingPlace, endingPlace, departmentDate, creatAt, updateAt);
         // Attempt to insert the new ticket into the database
         TicketEntity.insert(newTicket);
