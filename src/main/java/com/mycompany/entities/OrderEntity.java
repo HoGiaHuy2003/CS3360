@@ -183,7 +183,7 @@ public class OrderEntity extends BaseEntity {
         Order order = null;
         
         try {
-            String sql = "SELECT Users.UserName, Users.Email, Users.PhoneNumber, Order_.OrderId, Order_.OrderDate, Order_.CancelDate, Status.StatusId, Status.StatusName, Ticket.TicketId, Ticket.TicketName, Category.CategoryId, Category.CategoryName, Ticket.StartingPlace, Ticket.EndingPlace, Ticket.DepartmentTime, OrderDetail.Price FROM Users INNER JOIN OrderDetail INNER JOIN Order_ ON OrderDetail.OrderId = Order_.OrderId INNER JOIN Status ON Order_.StatusId = Status.StatusId INNER JOIN Ticket ON OrderDetail.TicketId = Ticket.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId ON Users.UserId = Order_.UserId ORDER BY OrderId ASC;";
+            String sql = "SELECT Users.UserName, Users.Email, Users.PhoneNumber, Order_.OrderId, Order_.OrderDate, Order_.CancelDate, Status.StatusId, Status.StatusName, Ticket.TicketId, Ticket.TicketName, Category.CategoryId, Category.CategoryName, Ticket.StartingPlace, Ticket.EndingPlace, Ticket.DepartmentTime, OrderDetail.Price FROM Users INNER JOIN OrderDetail INNER JOIN Order_ ON OrderDetail.OrderId = Order_.OrderId INNER JOIN Status ON Order_.StatusId = Status.StatusId INNER JOIN Ticket ON OrderDetail.TicketId = Ticket.TicketId LEFT JOIN Category ON Ticket.CategoryId = Category.CategoryId ON Users.UserId = Order_.UserId ORDER BY OrderId ASC;";
         
             statement = conn.prepareStatement(sql);
             

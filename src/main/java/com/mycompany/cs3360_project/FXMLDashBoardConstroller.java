@@ -1097,6 +1097,8 @@ public class FXMLDashBoardConstroller implements Initializable {
         
         Reservation userReservation = ReservationEntity.ticketListOfUserId(UserId);
         
+//        bookingTicket_Btn.setDisable(false);
+        
         if (userReservation == null) {
             bookingTicket_Btn.setDisable(true);
             bookingTicket_form.setVisible(false);

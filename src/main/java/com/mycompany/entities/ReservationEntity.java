@@ -79,7 +79,7 @@ public class ReservationEntity extends BaseEntity {
         open();
         
         try {
-            String sql = "SELECT Users.UserId, Users.UserName, Users.Age, Users.Email, Users.PhoneNumber, Ticket.*, Category.* FROM Ticket INNER JOIN Reservation ON Ticket.TicketId = Reservation.TicketId INNER JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Reservation.UserId = Users.UserId WHERE users.UserId = ?;";
+            String sql = "SELECT Users.UserId, Users.UserName, Users.Age, Users.Email, Users.PhoneNumber, Ticket.*, Category.* FROM Ticket INNER JOIN Reservation ON Ticket.TicketId = Reservation.TicketId LEFT JOIN Category ON Ticket.CategoryId = Category.CategoryId INNER JOIN Users ON Reservation.UserId = Users.UserId WHERE users.UserId = ?;";
             statement = conn.prepareStatement(sql);
             
             statement.setInt(1, UserId);
