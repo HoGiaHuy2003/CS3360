@@ -4,7 +4,10 @@
  */
 package com.mycompany.models;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -130,5 +133,28 @@ public class Ticket {
     @Override
     public String toString() {
         return "Ticket{" + "ticketId=" + ticketId + ", ticketName=" + ticketName + ", price=" + price + ", startingPlace=" + startingPlace + ", endingPlace=" + endingPlace + ", departmentTime=" + departmentTime + ", category=" + category + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    }
+    
+    public static Boolean validatePrice(Float price) {
+//        Pattern pattern = Pattern.compile("[+]?([0-9]*[.])?[0-9]+");
+//        Matcher matcher = pattern.matcher(price.toString());
+//        if (matcher.find() && matcher.group().equals(price)) {
+//            return true;
+//        }
+//        return false;
+
+        if (price > 0) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public static Boolean isBeforeCurrentDate(LocalDate dateSelected) {
+        if (dateSelected.isBefore(LocalDate.now())) {
+            return true;
+        }
+        
+        return false;
     }
 }

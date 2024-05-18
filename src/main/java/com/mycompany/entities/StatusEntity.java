@@ -19,7 +19,7 @@ import javafx.collections.ObservableList;
  * @author Admin
  */
 public class StatusEntity extends BaseEntity {
-    public static List<Status> getStatusList() {
+    public static ObservableList<Status> getStatusList() {
         List<Status> statusList = new Vector<>();
 
         open();

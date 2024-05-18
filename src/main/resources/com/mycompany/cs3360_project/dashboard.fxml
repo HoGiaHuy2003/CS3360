@@ -198,7 +198,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="selectTicket_form" layoutX="186.0" layoutY="79.0" prefHeight="544.0" prefWidth="900.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="selectTicket_form" layoutX="186.0" layoutY="79.0" prefHeight="544.0" prefWidth="900.8" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="7.0" layoutY="14.0" prefHeight="529.0" prefWidth="266.0" styleClass="bg-white" stylesheets="@designDashboard.css">
                            <children>
@@ -516,6 +516,15 @@
                            </font>
                         </Label>
                         <ComboBox fx:id="bill_history" layoutX="346.0" layoutY="39.0" onAction="#setUpOrderOfUser" prefHeight="26.0" prefWidth="70.0" />
+                        <Button fx:id="bill_setStatus_btn" layoutX="113.0" layoutY="40.0" mnemonicParsing="false" onAction="#setStatusForOrder" prefHeight="25.0" prefWidth="129.0" text="Set Status For Order" />
+                        <ComboBox fx:id="bill_statusList" layoutX="92.0" layoutY="3.0" prefWidth="150.0" />
+                        <Label fx:id="bill_statusList_label" layoutX="6.0" layoutY="7.0" prefHeight="22.0" prefWidth="70.0" text="Status List" />
+                        <Label fx:id="bill_userList_label" layoutX="535.0" layoutY="42.0" text="User: ">
+                           <font>
+                              <Font name="Tahoma" size="16.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="bill_userList" layoutX="578.0" layoutY="40.0" onAction="#setUpHistoryComboBox" prefWidth="150.0" />
                      </children>
                   </AnchorPane>
                </children>

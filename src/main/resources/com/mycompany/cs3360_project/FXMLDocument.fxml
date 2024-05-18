@@ -51,7 +51,7 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="MINUS" />
                </graphic>
             </Button>
-            <Label fx:id="title" layoutX="339.0" layoutY="122.0" styleClass="signInText" stylesheets="@LoginDesign.css" text="SIGN UP" textFill="#ccb8b8">
+            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" layoutX="214.0" layoutY="122.0" prefHeight="37.0" prefWidth="372.0" styleClass="signInText" stylesheets="@LoginDesign.css" text="SIGN UP" textAlignment="CENTER" textFill="#ccb8b8">
                <font>
                   <Font name="Times New Roman Bold" size="32.0" />
                </font>
@@ -63,7 +63,7 @@
                   <Font size="17.0" />
                </font>
             </Button>
-            <Hyperlink fx:id="hyperlink" layoutX="324.0" layoutY="481.0" onAction="#switchForm" stylesheets="@LoginDesign.css" text="Already have an account?" />
+            <Hyperlink fx:id="hyperlink" alignment="CENTER" layoutX="267.0" layoutY="481.0" onAction="#switchForm" prefHeight="21.0" prefWidth="270.0" stylesheets="@LoginDesign.css" text="Already have an account?" textAlignment="CENTER" />
             <FontAwesomeIconView fill="#f40000" glyphName="USER_PLUS" layoutX="354.0" layoutY="99.0" size="7em" text="" />
             <TextField fx:id="signup_username" alignment="BOTTOM_CENTER" layoutX="267.0" layoutY="293.0" prefHeight="30.0" prefWidth="270.0" promptText="Username" styleClass="textFill" stylesheets="@LoginDesign.css" />
             <TextField fx:id="signup_age" alignment="BOTTOM_CENTER" layoutX="267.0" layoutY="167.0" prefHeight="30.0" prefWidth="270.0" promptText="Age" styleClass="textFill" stylesheets="@LoginDesign.css" />

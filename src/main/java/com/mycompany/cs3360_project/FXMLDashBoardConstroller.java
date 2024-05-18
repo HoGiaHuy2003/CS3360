@@ -68,6 +68,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Button bill_Btn;
 
+
     @FXML
     private Button selectTicket_Btn;
 
@@ -134,7 +135,7 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Button selectTicket_updateBtn;
 
-     @FXML
+    @FXML
     private Button bookingTicket_Btn;
 
     @FXML
@@ -350,6 +351,21 @@ public class FXMLDashBoardConstroller implements Initializable {
     @FXML
     private Label bill_username;
     
+    @FXML
+    private ComboBox<Status> bill_statusList;
+    
+    @FXML
+    private Button bill_setStatus_btn;
+    
+    @FXML
+    private Label bill_statusList_label;
+    
+    @FXML
+    private Label bill_userList_label;
+    
+    @FXML
+    private ComboBox<Users> bill_userList;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -375,6 +391,10 @@ public class FXMLDashBoardConstroller implements Initializable {
         setUpHistoryComboBox();
         
         setUpOrderOfUser();
+        
+        setUpStatusList();
+        
+        setUpUserList();
     }    
     
     @FXML
@@ -694,6 +714,8 @@ public class FXMLDashBoardConstroller implements Initializable {
             }
             
             UserRolesEntity.deleteByUserId(Users.getLoginUserId());
+            
+            ReservationEntity.clearReservation(Users.getLoginUserId());
         
             ObservableList<Order> orderListOfUserDeleted = OrderEntity.printOrderListOfUser(Users.getLoginUserId());
 
@@ -727,8 +749,29 @@ public class FXMLDashBoardConstroller implements Initializable {
             selectTicket_addBtn.setDisable(true);
         }
         users_Btn.setDisable(false);
+        
+        bill_setStatus_btn.setVisible(true);
+
+        bill_statusList.setVisible(true);
+
+        bill_statusList_label.setVisible(true);
+
+        bill_userList_label.setVisible(true);
+
+        bill_userList.setVisible(true);
+        
         if (!UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Admin") && !UserRolesEntity.isAuthorized(Users.getLoginUserId(), "Employee")) {
             users_Btn.setDisable(true);
+            
+            bill_setStatus_btn.setVisible(false);
+            
+            bill_statusList.setVisible(false);
+            
+            bill_statusList_label.setVisible(false);
+            
+            bill_userList_label.setVisible(false);
+            
+            bill_userList.setVisible(false);
         }
     }
     
@@ -802,7 +845,29 @@ public class FXMLDashBoardConstroller implements Initializable {
         String ticketName = selectTicket_ticketName.getText();
         String startingPlace = selectTicket_startingPlace.getText();
         String endingPlace = selectTicket_endingPlace.getText();
-        Float price = Float.valueOf(selectTicket_price.getText());
+        Float price = null;
+        
+        try {
+            if (Ticket.validatePrice(Float.parseFloat(selectTicket_price.getText()))) {
+                price = Float.valueOf(selectTicket_price.getText());
+            } 
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!!!");
+                alert.setHeaderText("Add Ticket Failure!!!");
+                alert.setContentText("Price must be a positive floating point number, please try again!!!");
+                alert.showAndWait();
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Add Ticket Failure!!!");
+            alert.setContentText("Price must be a positive floating point number, please try again!!!");
+            alert.showAndWait();
+            return;
+        }
+        
         String categoryName = (String)selectTicket_category.getSelectionModel().getSelectedItem();
         Integer categoryId = null;
         List<Category> categoryList = CategoryEntity.getCategoryList();
@@ -820,7 +885,20 @@ public class FXMLDashBoardConstroller implements Initializable {
 //            categoryId = 2;
 //        }
         //get DepartureDate
+
+
+
         LocalDate selectedDate = selectTicket_Date.getValue();
+        
+        if (Ticket.isBeforeCurrentDate(selectedDate)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!!!");
+            alert.setHeaderText("Add Ticket Failure!!!");
+            alert.setContentText("Departure time must be after nowadays, please try again!!!");
+            alert.showAndWait();
+            return;
+        }
+        
         Date departmentDate = java.sql.Date.valueOf(selectedDate);
         //Get creat and update Time
         Date creatAt = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -1107,23 +1185,57 @@ public class FXMLDashBoardConstroller implements Initializable {
         clearReservationForm();
     }
     
+    @FXML
     private void setUpHistoryComboBox() {
         Integer UserId = Users.getLoginUserId();
         if (Users.getSelectedUserId() != null) {
             UserId = Users.getSelectedUserId();
         }
         
-        ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+        ObservableList<Order> orderList;
         
-        if (orderList.size() == 0) {
+        bill_Btn.setDisable(false);
+        
+        if (UserRolesEntity.isAuthorized(UserId, "Admin") || UserRolesEntity.isAuthorized(UserId, "Employee")) {
+            orderList = OrderEntity.printOrderList();
+        } else {
+            orderList = OrderEntity.printOrderListOfUser(UserId);
             bill_Btn.setDisable(true);
             
+            if (orderList.size() == 0) {
+
+                bill_form.setVisible(false);
+
+                selectTicket_form.setVisible(true);
+
+                bill_userList.getSelectionModel().clearSelection();
+
+                return;
+            }
+        }
+        
+        if (bill_userList.getSelectionModel().getSelectedItem() != null) {
+            orderList = OrderEntity.printOrderListOfUser(bill_userList.getSelectionModel().getSelectedItem().getUserId());
+        }
+        
+        if (orderList.size() == 0) {
+
             bill_form.setVisible(false);
-            
+
             selectTicket_form.setVisible(true);
             
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning!");
+            alert.setHeaderText("No order");
+            alert.setContentText(bill_userList.getSelectionModel().getSelectedItem().getUsername() + " has no order!");
+            alert.showAndWait();
+            
+            bill_userList.getSelectionModel().clearSelection();
+
             return;
         }
+        
+        bill_Btn.setDisable(false);
         
 //        bill_history.getSelectionModel().clearSelection();
         
@@ -1148,7 +1260,17 @@ public class FXMLDashBoardConstroller implements Initializable {
             UserId = Users.getSelectedUserId();
         }
         
-        ObservableList<Order> orderList = OrderEntity.printOrderListOfUser(UserId);
+        ObservableList<Order> orderList;
+        
+        if (UserRolesEntity.isAuthorized(UserId, "Admin") || UserRolesEntity.isAuthorized(UserId, "Employee")) {
+            orderList = OrderEntity.printOrderList();
+        } else {
+            orderList = OrderEntity.printOrderListOfUser(UserId);
+        }
+        
+        if (bill_userList.getSelectionModel().getSelectedItem() != null) {
+            orderList = OrderEntity.printOrderListOfUser(bill_userList.getSelectionModel().getSelectedItem().getUserId());
+        }
         
         if (orderList.size() == 0) {
             return;
@@ -1183,6 +1305,10 @@ public class FXMLDashBoardConstroller implements Initializable {
                 
                 bill_TableView.setItems(ticketList);
                 
+                bill_totalPayment.setText(OrderEntity.totalBill(UserId).toString());
+                
+                return;
+                
             }
             
 //            if (bill_history.getSelectionModel().getSelectedItem() == null) {
@@ -1190,7 +1316,7 @@ public class FXMLDashBoardConstroller implements Initializable {
 //            }
         }
         
-        bill_totalPayment.setText(OrderEntity.totalBill(UserId).toString());
+
     }
     
     @FXML
@@ -1234,4 +1360,66 @@ public class FXMLDashBoardConstroller implements Initializable {
             }
         }
     }
+    
+//    @FXML
+    private void setUpStatusList() {
+        ObservableList<Status> statusList = StatusEntity.getStatusList();
+        
+        bill_statusList.setItems(statusList);
+        
+        String currentStatus = bill_status.getText();
+        
+        for (int i = 0; i < statusList.size(); i++) {
+            if (statusList.get(i).getStatusName().equals(currentStatus)) {
+                bill_statusList.getSelectionModel().select(statusList.get(i));
+                return;
+            }
+        }
+    }
+    
+    @FXML
+    private void setStatusForOrder() {
+        Integer UserId = Users.getLoginUserId();
+        if (Users.getSelectedUserId() != null) {
+            UserId = Users.getSelectedUserId();
+        }
+        
+        if (bill_userList.getSelectionModel().getSelectedItem() != null) {
+            UserId = bill_userList.getSelectionModel().getSelectedItem().getUserId();
+        }
+        
+        List<Order> orderList = OrderEntity.findOrderListByUser(UserId);
+        
+        for (int i = 0; i < orderList.size(); i++) {
+            if (bill_history.getSelectionModel().getSelectedItem() == i+1) {
+                OrderEntity.editStatusForOrder(orderList.get(i).getOrderId(), bill_statusList.getSelectionModel().getSelectedItem().getStatusId());
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success!!!");
+                alert.setHeaderText("Set status for order successfully!!!");
+                alert.setContentText("Status: " + bill_statusList.getSelectionModel().getSelectedItem().getStatusName() + "is set for this order.");
+                alert.showAndWait();
+                
+                setUpOrderOfUser();
+                
+                return;
+            }
+        }
+    }
+    
+    private void setUpUserList() {
+        ObservableList<Users> userList = UsersEntity.index();
+        
+        bill_userList.setItems(userList);
+        
+//        setUpHistoryComboBox();
+        
+//        for (int i = 0; i < userList.size(); i++) {
+//            if (userList.get(i).getUsername().equals(bill_username.getText())) {
+//                bill_userList.getSelectionModel().select(userList.get(i));
+//                return;
+//            }
+//        }
+    }
+    
 } 

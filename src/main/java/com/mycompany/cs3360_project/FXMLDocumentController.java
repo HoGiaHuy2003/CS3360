@@ -170,11 +170,29 @@ public class FXMLDocumentController implements Initializable {
            user.setPassword(signin_password.getText().toString());
 
            Users userLogin = UsersEntity.login(user);
+           
+           
+
            if (userLogin != null) {
-               Users.setLoginUserId(userLogin.getUserId());
+                
+                Users.setLoginUserId(userLogin.getUserId());
+               
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successfully!!!");
+                alert.setHeaderText("Log in successfully!!!");
+                alert.setContentText("Account " + user.getUsername() + " is logged in!!!");
+                alert.showAndWait();
+               
+
                switchToDashBoard();
            } else {
                errorLogin();
+               
+               Users.setCountFailureLoginNumber(Users.getCountFailureLoginNumber() + 1);
+               
+               if (Users.getCountFailureLoginNumber() == 3) {
+                   System.exit(0);
+               }
            }
            return;
         } // Sign In Method
@@ -214,14 +232,18 @@ public class FXMLDocumentController implements Initializable {
                 
                 String username = signup_username.getText().toString();
                 
-                if (UsersEntity.checkExisted(username) != null) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error!!!");
-                    alert.setHeaderText("Cannot register!!!");
-                    alert.setContentText("Username is already existed, please choose another username!!!");
-                    alert.showAndWait();
-                    return;
-                } 
+                if (Users.getLoginUserId() == null) {
+                    if (UsersEntity.checkExisted(username) != null) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error!!!");
+                        alert.setHeaderText("Cannot register!!!");
+                        alert.setContentText("Username is already existed, please choose another username!!!");
+                        alert.showAndWait();
+                        return;
+                    } 
+                }
+                
+
                 
                 if (!Users.validatePasswordHash(signup_password.getText().toString())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -240,10 +262,24 @@ public class FXMLDocumentController implements Initializable {
                     UsersEntity.insert(user); 
                     signIn_form.setVisible(true);
                     signup_form.setVisible(false);
+                    
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Successfully!!!");
+                    alert.setHeaderText("Register successfully!!!");
+                    alert.setContentText("Your account is registered!!!");
+                    alert.showAndWait();
+                    
                 } // Register 
                 else {
                     user.setUserId(Users.getLoginUserId());
                     UsersEntity.update(user);
+                    
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Successfully!!!");
+                    alert.setHeaderText("Update Information successfully!!!");
+                    alert.setContentText("Your information is updated!!!");
+                    alert.showAndWait();
+                    
                     switchToDashBoard();
                 } // Edit User Information
                 

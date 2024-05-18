@@ -4,8 +4,13 @@
  */
 package com.mycompany.models;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +31,8 @@ public class Users {
     private static Integer loginUserId;
     
     private static Integer selectedUserId;
+    
+    private static Integer countFailureLoginNumber = 0;
 
     public static Integer getLoginUserId() {
         return loginUserId;
@@ -41,6 +48,14 @@ public class Users {
 
     public static void setSelectedUserId(Integer selectedUserId) {
         Users.selectedUserId = selectedUserId;
+    }
+
+    public static Integer getCountFailureLoginNumber() {
+        return countFailureLoginNumber;
+    }
+
+    public static void setCountFailureLoginNumber(Integer countFailureLoginNumber) {
+        Users.countFailureLoginNumber = countFailureLoginNumber;
     }
 
     public Users() {
@@ -118,6 +133,11 @@ public class Users {
     public void setRoleList(List<Roles> roleList) {
         this.roleList = roleList;
     }
+
+    @Override
+    public String toString() {
+        return username;
+    }
     
     public static Boolean validateAge(Integer age) {
         Pattern pattern = Pattern.compile("^(0?[1-9]|[1-9][0-9]|100|200)$");
@@ -154,6 +174,25 @@ public class Users {
         }
         return false;
     }
+    
+//    public static String md5PasswordHash(String passwordHash) {
+//
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//            
+//            byte[] hashInBytes = md.digest(passwordHash.getBytes(StandardCharsets.UTF_8));
+//            StringBuffer sb = new StringBuffer();
+//            for (byte b : hashInBytes) {
+//                sb.append(String.format("%02x", b));
+//            }
+//            passwordHash = sb.toString();
+//
+//        } catch (NoSuchAlgorithmException ex) {
+//            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return passwordHash;
+//    }
     
 //    public static String generateString(int length) {
 //        String alphabet = "abcdefghijklmnopqrstuvwxyz";
